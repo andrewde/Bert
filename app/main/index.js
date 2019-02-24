@@ -1,4 +1,5 @@
 const electron = require('electron')
+// Electron's App instance allows to control your application's event lifecycle.
 const { app, Tray, Menu, BrowserWindow } = electron
 const ipcMain = electron.ipcMain
 const plugin = require('../plugins')
@@ -54,12 +55,16 @@ function createMainWindow() {
   config.context.mainWindow = mainWindow
 }
 
+/**
+ * Create the preference window where user can tweak settings.
+ */
 function createPrefWindow() {
   prefWindow = new BrowserWindow({
     width: 800,
     height: 600,
     minWidth: 600,
     minHeight: 400,
+    // TODO ELaunch should be renamed
     title: 'ELaunch Preferences',
     autoHideMenuBar: !config.debug,
     backgroundColor: 'alpha(opacity=0)',
@@ -74,7 +79,11 @@ function createPrefWindow() {
 
 let tray = null
 
+/**
+ * Initialize the system tray icon and menu.
+ */
 function initTray() {
+  // TODO replace icon
   tray = new Tray(path.normalize(`${__dirname}/../icon_16x16@2x.png`))
   const contextMenu = Menu.buildFromTemplate([{
     label: 'Toggle ELaunch',
@@ -93,6 +102,7 @@ function initTray() {
       }
     },
   }, {
+    // TODO update links
     label: 'Bug Report',
     click(item, focusedWindow) {
       electron.shell.openExternal('https://github.com/zaaack/ELaunch/issues')
@@ -154,18 +164,26 @@ function initMenu() { // init menu to fix copy/paste shortcut issue
 }
 
 function makeSingleInstance() {
+    console.log('in makeSingleInstance');
   return app.makeSingleInstance((commandLine, workingDirectory) => {
+    console.log(`Callback on primary app invoked with commandLine '${commandLine}' and workingDirectory '${workingDirectory}'`)
+    // Another instance of the app is executing.
+    // Make the primary window focused and non-minimized.
     if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore();
+      if (mainWindow.isMinimized()) {
+        console.log('Main window minmimized, retoring it.');
+        mainWindow.restore();
+      }
+      console.log('Main window not in focus, focusing.');
       mainWindow.focus();
     }
   })
 }
 
-
 function init() {
   const shouldQuit = makeSingleInstance()
   if (shouldQuit) {
+    console.error("Only one instance is allowed to run at a time");
     app.quit()
     return
   }
@@ -200,6 +218,7 @@ function init() {
     }
   })
   ipcMain.on('exec', (event, data) => {
+    console.log('Received exec event with data', data);
     plugin.exec(data, event)
   })
   ipcMain.on('exec-item', (event, data) => {
@@ -219,7 +238,6 @@ function init() {
 }
 
 module.exports = { init }
-
 
 // if (config.debug) {
 //   const installer = require('electron-devtools-installer')
