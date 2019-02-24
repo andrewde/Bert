@@ -4,7 +4,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zaaack/ELaunch.git"
+    "url": ""
   },
   "keywords": [
     "launcher",
@@ -12,12 +12,12 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zaaack/ELaunch/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/zaaack/ELaunch#readme",
+  "homepage": "",
   "author": {
-    "email": "zaaack@qq.com",
-    "name": "zaaack"
+    "email": "",
+    "name": ""
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development electron ./app/index.js",
@@ -123,7 +123,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "build": {
-    "appId": "io.gitub.zaaack.elaunch"
+    "appId": ""
   },
   "eslintConfig": {
     "parser": "babel-eslint",
