@@ -20,10 +20,13 @@ module.exports = {
     selectNextItemOpt: { default: 'Right' },
   },
   plugins: {
+    // Plugins available to handle the different types of commands
     app: {
       path: `${__dirname}/../plugins/app/index.js`,
-      enable: true, // whether the plugin is enable, default is true
-      default: true, // default plugin don't need to input key
+      // whether the plugin is enable, default is true
+      enable: true,
+      // default plugin don't need to input key
+      default: true,
       config: {
         darwin: {
           appPaths: ['/Applications', `${home}/Applications`],
