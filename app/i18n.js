@@ -48,8 +48,8 @@ i18n
     // have a common namespace used around the full app
     ns: ['common'],
     defaultNS: 'common',
-
-    debug: process.env.NODE_ENV === 'development',
+    // The logging is extremely verbose!
+    // debug: process.env.NODE_ENV === 'development',
     interpolation: {
       // escapeValue: false // not needed for react!!
     },
