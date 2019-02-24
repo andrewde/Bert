@@ -23,6 +23,7 @@ function init() {
   // app/apps.db 用于缓存应用信息，当有新应用安装时才更新
   // {lastUpdateDate:0 ,apps:[]}
   appDbFile = `${globalConfig.dataPath}/app/app.db`
+  console.log(`appDbFile is ${appDbFile}`);
   fs.ensureFileSync(appDbFile)
   appDb = appDb
     || fs.readJsonSync(appDbFile, { throws: false, encoding: 'utf-8' })
@@ -46,7 +47,6 @@ function init() {
   })
 }
 
-
 module.exports = {
   setConfig(pCfg, gCfg) {
     pluginConfig = pCfg
@@ -55,10 +55,12 @@ module.exports = {
     init()
   },
   exec(args, event) {
+    console.log("Executing app plugin...");
     if (args.join('').trim() === '') return // 空格返回
     const patt = `*${args.join('*').toLowerCase()}*`
     const apps = Object.keys(appDb.apps).map(k => appDb.apps[k])
     if (apps.length === 0) {
+      // TODO remove config file, this warning will appear.
       event.sender.send('exec-reply', [{
         icon: defaultIcon,
         name: 'This plugin has to index apps in first run',
@@ -76,6 +78,8 @@ module.exports = {
       }
       return false
     }).slice(0, 20)
+    // TODO items should be renamed to results
+    console.log(`Sending exec-reply event with ${items.length} results back`);
     event.sender.send('exec-reply', items)
   },
   execItem(item, event) {
