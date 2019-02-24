@@ -34,6 +34,7 @@ function writeDefaultConfig() {
 }
 
 function loadConfig() {
+  console.log(`loading config file ${userConfigFile}`);
   const exist = fs.existsSync(userConfigFile)
   if (!exist) {
     writeDefaultConfig()
