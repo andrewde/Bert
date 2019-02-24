@@ -2,7 +2,7 @@ const os = require('os')
 const home = os.homedir()
 
 module.exports = {
-  title: 'ELaunch',
+  title: 'Berthe',
   width: 600,
   height: 60,
   maxHeight: 500,
