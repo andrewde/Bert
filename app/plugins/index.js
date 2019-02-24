@@ -15,9 +15,12 @@ node command: ELECTRON_RUN_AS_NODE=true `${process.execPath}`
  */
 
 function getPlugin(pluginInfo) {
+  console.log(`getPlugin for plugin name ${pluginInfo.name}`);
+
   const pluginFile = path.normalize(pluginInfo.path)
   const pluginIsRequiredBefore = !!require.cache[pluginFile]
   const plugin = require(pluginFile)
+
   if (!pluginIsRequiredBefore) {
     try {
       // init once
@@ -28,6 +31,7 @@ function getPlugin(pluginInfo) {
       console.error('Plugin [%s] setConfig failed!!', pluginInfo.name, e)
     }
   }
+  console.log('Plugin is', plugin);
   return plugin
 }
 
@@ -75,6 +79,7 @@ config.on('app-ready', loadPluginMap) // make config ready before set plugin con
 config.on('reload-config', loadPluginMap)
 
 function parseCmd(data) {
+  console.log(`Parsing cmd ${data.cmd}`);
   const args = data.cmd.split(' ')
   let key = 'app'
   if (args.length > 1 && (args[0] in pluginMap)) {
@@ -83,7 +88,7 @@ function parseCmd(data) {
     key = Object.keys(pluginMap).find(k => pluginMap[k].default)
   }
   const plugin = pluginMap[key]
-  return {
+  let result = {
     key: key,
     path: path.resolve(config.dataPath, plugin.path),
     args: args,
@@ -91,12 +96,16 @@ function parseCmd(data) {
     plugin: plugin,
     config: plugin.config || {}
   }
+  console.log('cmd parsed to', result);
+
+  return result;
 }
 module.exports = {
   exec: (data, event) => {
     const cmdInfo = parseCmd(data)
     const plugin = getPlugin(cmdInfo.plugin)
     try {
+      console.log('calling plugin');
       plugin.exec(cmdInfo.args, event, cmdInfo)
     } catch (e) {
       console.error('Plugin [%s] exec failed!', cmdInfo.plugin.name, e)
