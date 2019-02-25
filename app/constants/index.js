@@ -9,6 +9,8 @@ module.exports = {
   dataPath,
   userConfigFile,
   languages: [{
+    // TODO clearly we don't want chinese right?
+    // Fr could be useful though
     value: 'zh',
     label: '简体中文',
   }, {
