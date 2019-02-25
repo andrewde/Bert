@@ -1,16 +1,16 @@
 {
-  "name": "ELaunch",
-  "version": "0.0.3",
+  "name": "Berth",
+  "version": "0.0.1",
   "main": "index.js",
   "repository": {
-    "type": "git",
+    "type": "",
     "url": ""
   },
   "keywords": [
     "launcher",
     "electron"
   ],
-  "license": "MIT",
+  "license": "",
   "bugs": {
     "url": ""
   },
