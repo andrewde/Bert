@@ -74,6 +74,8 @@ function getAppInfo(file) {
   }))
 }
 
+// TODO I wonder if we could have a way to pre-warm the plugins.
+// This is executed when the pluign is invoked.
 function update(appDb, appDbFile, pCfg, gCfg) {
   pluginConfig = pCfg
   globalConfig = gCfg
@@ -85,6 +87,7 @@ function update(appDb, appDbFile, pCfg, gCfg) {
   return Promise.all(pluginConfig.appPaths
     .map(_dir => {
       const dir = _dir.replace(/^~\//, `${os.homedir()}/`)
+      console.log(`Updating apps at dir '${dir}'`);
       const findCmd =
         `mdfind -onlyin ${dir} 'kMDItemFSName=*.app' | grep -v '\.app\/'`
       return exec(findCmd, { maxBuffer: 5 * 1024 * 1024 })
@@ -93,6 +96,7 @@ function update(appDb, appDbFile, pCfg, gCfg) {
           if (!file) return
           const mtime = fs.statSync(file).mtime.getTime()
           const appName = path.basename(file, '.app')
+            console.log(`----- loaded '${appName}'`);
           if (mtime > appDb.lastUpdateTime
                || !appDb.apps[appName]) {
             tmpApps[appName] = yield getAppInfo(file)
