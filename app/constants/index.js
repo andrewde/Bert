@@ -1,7 +1,7 @@
 const os = require('os')
 
 const debug = process.argv.some(value => value.includes('--debug'))
-const dataPath = `${os.homedir()}/.ELaunch`
+const dataPath = `${os.homedir()}/.berth`
 const userConfigFile = `${dataPath}/config.json5`
 
 module.exports = {
