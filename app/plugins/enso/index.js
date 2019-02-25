@@ -85,9 +85,9 @@ function handleLearnCommand(args, event, cmdInfo) {
     fs.writeFileSync(filepath, redirect, 'utf-8');
 
     event.sender.send('exec-reply', [{
-      name: `Learned ${name}`,
+      name: `'${name}' saved.`,
       icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
-      value: args,
+      value: filepath,
       detail: ''
     }])
 }
