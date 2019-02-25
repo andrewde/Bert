@@ -99,6 +99,7 @@ module.exports = {
           url: 'http://github.com/search?q=%s',
           icon: 'https://github.com/fluidicon.png',
         },
+        // TODO add google chrome as an engine here
       },
     },
     shell: {
@@ -137,5 +138,21 @@ module.exports = {
         calc: {},
       },
     },
+    e: {
+        path: `${__dirname}/../plugins/enso/index.js`,
+        commands: {
+          learn: {
+            // engine: 'Bing',
+            // url: 'https://www.bing.com/search/?q=%s',
+            // icon: 'https://cn.bing.com/sa/simg/bing_p_rr_teal_min.ico',
+          },
+          open: {
+            // engine: 'Baidu',
+            // url: 'https://www.baidu.com/s?wd=%s',
+            // icon: 'https://www.baidu.com/img/baidu.svg',
+          }
+          // TODO add google chrome as an engine here
+        },
+      },
   },
 }
