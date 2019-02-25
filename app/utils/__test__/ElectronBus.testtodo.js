@@ -1,4 +1,3 @@
-import test from 'ava';
 import {Application} from 'spectron';
 
 test.beforeEach(async t => {

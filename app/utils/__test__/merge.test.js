@@ -1,4 +1,3 @@
-import test from 'ava'
 import { merge, getType } from '../merge'
 
 test('merge', t => {

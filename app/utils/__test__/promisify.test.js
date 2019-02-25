@@ -1,4 +1,3 @@
-import test from 'ava'
 import promisify from '../promisify'
 
 function asyncFunc(hasError, b, cb) {
