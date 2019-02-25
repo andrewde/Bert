@@ -9,6 +9,7 @@ const winMgr = {
   },
   setPosition(win, pos) {
     let display = electron.screen.getPrimaryDisplay()
+
     if (config.display && Number.isInteger(config.display)) {
       display = electron.screen.getAllDisplays()
         .find((d) => d.id === config.display) || display
@@ -19,12 +20,17 @@ const winMgr = {
     const dw = display.workAreaSize.width
     const dh = display.workAreaSize.height
     const wb = win.getBounds()
+
+    // TODO in preference panel, add an option to have the app centered by default
     // set window to center in primary display when default
     let x = bx + (dw - wb.width) / 2
     let y = by + (dh - wb.height) / 2
 
     const isCustom = pos && Number.isInteger(pos.x)
       && Number.isInteger(pos.y)
+
+    console.log(`position isCustom ${isCustom}`);
+
     if (isCustom) {
       x = bx + pos.x
       y = bx + pos.y
@@ -35,6 +41,13 @@ const winMgr = {
 
     x = Math.round(x)
     y = Math.round(y)
+
+    console.log("x and y " + x + " and " + y);
+
+    // TODO this should be configurable from settings panel
+    // set window to left corner like enso by default
+    x = 0;
+    y = 0;
 
     win.setPosition(x, y)
   },
