@@ -3,6 +3,11 @@ let shell = electron.shell
 var querystring = require('querystring');
 let pluginConfig
 const fs = require('fs-extra')
+const os = require('os')
+// On purpose not using constant file to keep this plugin standalone.
+const dataPath = `${os.homedir()}/.berth/Enso`
+// TODO what about windows and linux?
+const macOsShortcutExtension = 'webloc';
 
 module.exports = {
   setConfig: function (pConfig, globalConfig) {
@@ -14,7 +19,7 @@ module.exports = {
     console.log(`Enso plugin has received a command ${cmdInfo.key}`);
     console.log('Enso plugin has received some args', args);
 
-    handleCommand(args, cmdInfo);
+    handleCommand(args, event, cmdInfo);
 
     // try to grab text selected outside of app
 
@@ -27,26 +32,27 @@ module.exports = {
     // }])
   },
   execItem: function (item, event) {
-    let urlPatt = pluginConfig.url || 'https://www.bing.com/search/?q=%s'
-    shell.openExternal(urlPatt.replace('%s', querystring.escape(item.value)))
+    console.log('executing item', item);
+    // let urlPatt = pluginConfig.url || 'https://www.bing.com/search/?q=%s'
+    shell.openItem(item.value)
     event.sender.send('exec-item-reply')
   }
 }
 
-function handleCommand(args, cmdInfo) {
+function handleCommand(args, event, cmdInfo) {
     switch(cmdInfo.key) {
         case 'learn':
-        handleLearnCommand(args, cmdInfo);
+        handleLearnCommand(args, event, cmdInfo);
           break;
         case 'open':
-          // code block
+        handleOpenCommand(args, event, cmdInfo);
           break;
         default:
           // code block
       }
 }
 
-function handleLearnCommand(args, cmdInfo) {
+function handleLearnCommand(args, event, cmdInfo) {
     let name = args[0];
     let preposition = args[1];
     let url = args[2];
@@ -70,9 +76,62 @@ function handleLearnCommand(args, cmdInfo) {
 </plist>
     `;
 
-    let filepath = `/Users/detiffe/.ELaunch/Learn/${name}.webloc`;
+    let filepath = `${dataPath}/${name}.${macOsShortcutExtension}`;
 
     console.log(`Writing file ${filepath}`);
 
+    // TODO if the directory does not exist it will just crash.
+    //  Error: ENOENT: no such file or director
     fs.writeFileSync(filepath, redirect, 'utf-8');
+
+    event.sender.send('exec-reply', [{
+      name: `Learned ${name}`,
+      icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
+      value: args,
+      detail: ''
+    }])
+}
+
+function handleOpenCommand(args, event, cmdInfo) {
+    let dir = fs.readdirSync(dataPath);
+
+    console.log(`loading files from ${dataPath}`);
+
+    if (!cmdInfo.args){
+        // TODO return a proper message? like no results?
+        console.log(`empty args, returning`);
+        return;
+    }
+
+    if (!dir) {
+        // TODO create diretcory
+        // TODO then return a proper message? like no results?
+        console.log(`directory ${dataPath} does not exist, returning`);
+        return;
+    }
+
+    let results = [];
+
+    // es5
+    for(var i = 0, l = dir.length; i < l; i++) {
+        var filePath = dir[i];
+        let isAMatch = cmdInfo.args.some(arg=>filePath.includes(arg));
+        if (isAMatch) {
+            results.push({
+                name: filePath,
+                // TODO can we get the icon from the file itself?
+                // icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
+                value: `${dataPath}/${filePath}`
+                // detail: ''
+              });
+        }
+        // console.log(filePath)
+    }
+
+    event.sender.send('exec-reply', results)
+
+    // // es6
+    // for(let filePath of dir) {
+    //     console.log(filePath);
+    // }
 }
