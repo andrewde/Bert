@@ -31,7 +31,6 @@ function getPlugin(pluginInfo) {
       console.error('Plugin [%s] setConfig failed!!', pluginInfo.name, e)
     }
   }
-  console.log('Plugin is', plugin);
   return plugin
 }
 
@@ -52,8 +51,10 @@ function getMergedPluginInfo(pluginInfo, cmdConfig) {
 }
 
 function loadPluginMap() {
+  console.log('loading plugin map');
   pluginMap = {}
   Object.keys(config.plugins).forEach(pluginName => {
+    console.log(`loading plugin ${pluginName} and creating pluginInfo from its definition`);
     const pluginInfo = config.plugins[pluginName]
     pluginInfo.name = pluginName
     const cmdConfigMap = pluginInfo.commands || { [pluginName]: {} }
@@ -63,7 +64,8 @@ function loadPluginMap() {
       pluginMap[cmd] = getMergedPluginInfo(pluginInfo, cmdConfigMap[cmd])
     })
 
-    if(pluginInfo.config && pluginInfo.config.init_on_start){ //init plugin on program start
+    // init plugin on program start
+    if(pluginInfo.config && pluginInfo.config.init_on_start) {
       const plugin = getPlugin(pluginInfo)
       try {
         plugin.initOnStart && plugin.initOnStart(pluginInfo.config, config)
@@ -72,6 +74,7 @@ function loadPluginMap() {
       }
     }
   })
+    // console.log(pluginMap);
 }
 
 // console.log(pluginMap);
@@ -82,9 +85,13 @@ function parseCmd(data) {
   console.log(`Parsing cmd ${data.cmd}`);
   const args = data.cmd.split(' ')
   let key = 'app'
+  // ("something" in {"a string":"", "something":"", "another string":""}) > yes
   if (args.length > 1 && (args[0] in pluginMap)) {
+    // remove the first cell of array and return it
     key = args.shift()
+    console.log(`plucked key '${key}' from args`, key);
   } else {
+    console.log('plugin cannot be inferred from command, using default plugin from pluginMap');
     key = Object.keys(pluginMap).find(k => pluginMap[k].default)
   }
   const plugin = pluginMap[key]
@@ -96,7 +103,10 @@ function parseCmd(data) {
     plugin: plugin,
     config: plugin.config || {}
   }
-  console.log('cmd parsed to', result);
+  console.log('cmd args', result.args);
+  console.log('cmd plugin type', result.type);
+  console.log('cmd plugin name', result.plugin.name);
+  console.log('cmd plugin path', result.plugin.path);
 
   return result;
 }
