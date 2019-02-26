@@ -96,7 +96,6 @@ function update(appDb, appDbFile, pCfg, gCfg) {
           if (!file) return
           const mtime = fs.statSync(file).mtime.getTime()
           const appName = path.basename(file, '.app')
-            console.log(`----- loaded '${appName}'`);
           if (mtime > appDb.lastUpdateTime
                || !appDb.apps[appName]) {
             tmpApps[appName] = yield getAppInfo(file)
