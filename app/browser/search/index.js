@@ -38,7 +38,7 @@ function onExecItem($select, cmd) {
 }
 
 function onEnter($inp, cmd) {
-  console.log('onEnter');
+  console.log('onEnter, user pressed enter');
   if (cmd === lastCmd) {
     let $select = $('.js-item.select');
     if (!$select) {
@@ -86,6 +86,7 @@ function bindDocKeyUp() {
 function bindItemClick() {
   $.on('click', (e) => {
     const item = e.closest('.js-item') || e.closest('.js-btn')
+    console.log('an item has been clicked', item);
   })
 }
 
@@ -107,6 +108,7 @@ function bindIpcEvents() {
 
 function bindEvents() {
   bindInputKeyUp()
+  bindItemClick();
   bindDocKeyUp()
   bindIpcEvents()
 }
