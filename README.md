@@ -133,6 +133,14 @@ see [electron-builder](https://github.com/electron-userland/electron-builder)
 npm run dist
 ```
 
+### More details
+
+We’ll be using electron-builder since it has a built-in support for Code Signing/Auto Update etc.
+
+#### Build directory
+
+Create a directory build in the root of the project and save a background.png (macOS DMG background), icon.icns (macOS app icon) and icon.ico (Windows app icon) into it. The Linux icon set will be generated automatically based on the macOS.
+
 ## Screen Captures
 
 ### Plugin app
