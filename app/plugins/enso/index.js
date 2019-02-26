@@ -123,6 +123,8 @@ function handleOpenCommand(args, event, cmdInfo) {
         let fileExtension = path.extname(filePath);
         var filename = path.basename(filePath, fileExtension);
         let isAMatch = cmdInfo.args.some(arg=>filePath.includes(arg));
+        // TODO in plugin config, add a list of files or extneions to be ignored.
+        // e.g: .DS_STORE for mac os.
         if (isAMatch) {
             results.push({
                 // TODO name should not include the file extension! only the name.
