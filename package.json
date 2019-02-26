@@ -98,6 +98,7 @@
     "redux-thunk": "^2.1.0",
     "sass-loader": "^4.0.0",
     "shelljs": "^0.7.4",
+    "sinon": "^7.2.4",
     "spectron": "^3.4.0",
     "style-loader": "^0.13.1",
     "stylelint": "^7.1.0",
