@@ -9,6 +9,7 @@ const dataPath = `${os.homedir()}/.berth/Enso`
 // TODO should be moved to JSON config of plugin as this is custom to MAC OS
 // TODO what about windows and linux?!
 const macOsShortcutExtension = 'webloc';
+let path = require('path');
 
 module.exports = {
   setConfig: function (pConfig, globalConfig) {
@@ -119,11 +120,13 @@ function handleOpenCommand(args, event, cmdInfo) {
     // es5
     for(var i = 0, l = dir.length; i < l; i++) {
         var filePath = dir[i];
+        let fileExtension = path.extname(filePath);
+        var filename = path.basename(filePath, fileExtension);
         let isAMatch = cmdInfo.args.some(arg=>filePath.includes(arg));
         if (isAMatch) {
             results.push({
                 // TODO name should not include the file extension! only the name.
-                name: filePath,
+                name: filename,
                 // TODO can we get the icon from the file itself?
                 // icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
                 value: `${dataPath}/${filePath}`
