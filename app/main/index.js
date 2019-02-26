@@ -188,7 +188,10 @@ function init() {
     return
   }
   if (!config.debug) {
-    if (app.dock) app.dock.hide()
+    if (app.dock) {
+        console.log('app is docked, invoking hide');
+        app.dock.hide();
+    }
   }
   app.on('ready', () => {
     createMainWindow()
