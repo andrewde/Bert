@@ -1,5 +1,13 @@
 {
-    "extends": "google",
+    "extends": "airbnb",
+    "env": {
+        "commonjs": true,
+        "node": true,
+        "mocha": true
+    },
+    "plugins": [
+        "chai-friendly"
+    ],
     "parserOptions": {
         "ecmaVersion": 6,
         "sourceType": "module",
@@ -8,6 +16,9 @@
         }
     },
     "rules": {
-        "semi": "error"
+        "indent": ["error", 4],
+        "comma-dangle": ["error", "never"],
+        "no-unused-expressions": 0,
+        "chai-friendly/no-unused-expressions": 2
     }
 }
