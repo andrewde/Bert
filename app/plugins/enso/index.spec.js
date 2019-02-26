@@ -1,12 +1,17 @@
 import { expect } from "chai"
-import { exec } from "./index"
-// import * as sinon from 'sinon';
+import { setConfig, exec } from "./index"
+// import { fs } from 'fs-extra'
+var fs = require('fs-extra')
+import * as sinon from 'sinon';
 
 describe("index test", () => {
     let sandbox;
 
     beforeEach(() => {
         // sandbox = sinon.sandbox.create();
+        let pluginConfig = {};
+        let globalConfig = {};
+        setConfig(pluginConfig, globalConfig)
     });
 
     afterEach(() => {
@@ -15,8 +20,14 @@ describe("index test", () => {
 
     describe("sayHello function", () => {
         it("should say Hello guys!", () => {
-            let args = [ 'xxx', 'as', 'uuu' ];
-            let event = {};
+            // TODO should not be my user directory
+            let expectedFilePath = `/Users/detiffe/.berth/Enso/testName.webloc`;
+            let args = [ 'testName', 'as', 'uuu' ];
+            let event = {
+                sender : {
+                    send : sinon.stub()
+                }
+            };
             let cmdInfo = { key: 'learn',
             path: '/workspaces/Berthe/app/plugins/enso/index.js',
             args: [ 'ppppp', 'as', 'y' ],
@@ -28,7 +39,11 @@ describe("index test", () => {
                config: {} },
             config: {} };
             exec(args, event, cmdInfo);
-            // expect(str).to.equal("Hello guys!")
+            expect(fs.existsSync(expectedFilePath)).to.be.true;
+            fs.unlink(expectedFilePath, () => {
+                console.log('in callback');
+                expect(fs.existsSync(expectedFilePath)).to.be.false;
+            });
         })
     })
 })

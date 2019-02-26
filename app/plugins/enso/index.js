@@ -6,7 +6,8 @@ const fs = require('fs-extra')
 const os = require('os')
 // On purpose not using constant file to keep this plugin standalone.
 const dataPath = `${os.homedir()}/.berth/Enso`
-// TODO what about windows and linux?
+// TODO should be moved to JSON config of plugin as this is custom to MAC OS
+// TODO what about windows and linux?!
 const macOsShortcutExtension = 'webloc';
 
 module.exports = {
@@ -65,6 +66,7 @@ function handleLearnCommand(args, event, cmdInfo) {
         return;
     }
 
+    // TODO should be moved to JSON config of plugin as this is custom to MAC OS
     let redirect = `
     <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -85,7 +87,9 @@ function handleLearnCommand(args, event, cmdInfo) {
     fs.writeFileSync(filepath, redirect, 'utf-8');
 
     event.sender.send('exec-reply', [{
+        // TODO should be localized
       name: `'${name}' saved.`,
+      // TODO we can define the icon in the plugin config, may be eaier
       icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
       value: filepath,
       detail: ''
@@ -118,6 +122,7 @@ function handleOpenCommand(args, event, cmdInfo) {
         let isAMatch = cmdInfo.args.some(arg=>filePath.includes(arg));
         if (isAMatch) {
             results.push({
+                // TODO name should not include the file extension! only the name.
                 name: filePath,
                 // TODO can we get the icon from the file itself?
                 // icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
