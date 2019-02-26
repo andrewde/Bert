@@ -46,8 +46,8 @@ const winMgr = {
 
     // TODO this should be configurable from settings panel
     // set window to left corner like enso by default
-    x = 0;
-    y = 0;
+    // x = 0;
+    // y = 0;
 
     win.setPosition(x, y)
   },
