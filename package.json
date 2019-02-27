@@ -21,8 +21,9 @@
   },
   "scripts": {
     "compile": "rm -rf build && ./node_modules/.bin/electron-rebuild",
-    "lint-all": "node_modules/.bin/eslint **/*.js",
-    "lint": "node_modules/.bin/eslint \"app/plugins/enso/**/*.{js,jsx}\"",
+    "lint:js-all": "node_modules/.bin/eslint **/*.js",
+    "lint:js": "node_modules/.bin/eslint \"app/plugins/enso/**/*.{js,jsx}\" && node_modules/.bin/eslint ./app/main/index.js",
+    "lint-fix": "node_modules/.bin/eslint --fix --ext .js ./app/plugins/enso/",
     "start": "npm run compile && cross-env NODE_ENV=development electron ./app/index.js",
     "debug": "cross-env NODE_ENV=development electron ./app/index.js --debug=5858",
     "debug-brk": "electron ./app/index.js --debug-brk=5858",
