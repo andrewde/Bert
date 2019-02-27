@@ -1,8 +1,8 @@
 {
-  "name": "ELaunch",
+  "name": "Bert",
   "version": "0.0.3",
   "main": "index.js",
-  "description": "a cross platform launcher based on electron, just like Alfred in MacOS",
+  "description": "",
   "repository": {
     "type": "git",
     "url": ""
