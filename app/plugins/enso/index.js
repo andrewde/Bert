@@ -1,27 +1,27 @@
-const electron = require('electron')
-let shell = electron.shell
-var querystring = require('querystring');
-let pluginConfig
-const fs = require('fs-extra')
-const os = require('os')
+const electron = require('electron');
+const shell = electron.shell;
+const querystring = require('querystring');
+let pluginConfig;
+const fs = require('fs-extra');
+const os = require('os');
 // On purpose not using constant file to keep this plugin standalone.
-const dataPath = `${os.homedir()}/.berth/Enso`
+const dataPath = `${os.homedir()}/.berth/Enso`;
 // TODO should be moved to JSON config of plugin as this is custom to MAC OS
 // TODO what about windows and linux?!
 const macOsShortcutExtension = 'webloc';
-let path = require('path');
+const path = require('path');
 
 module.exports = {
-  setConfig: function (pConfig, globalConfig) {
-    pluginConfig = pConfig
-  },
-  exec: function (args, event, cmdInfo) {
+    setConfig(pConfig, globalConfig) {
+        pluginConfig = pConfig;
+    },
+    exec(args, event, cmdInfo) {
     // args = args.join(' ');
 
-    console.log(`Enso plugin has received a command ${cmdInfo.key}`);
-    console.log('Enso plugin has received some args', args);
+        console.log(`Enso plugin has received a command ${cmdInfo.key}`);
+        console.log('Enso plugin has received some args', args);
 
-    handleCommand(args, event, cmdInfo);
+        handleCommand(args, event, cmdInfo);
 
     // try to grab text selected outside of app
 
@@ -32,43 +32,43 @@ module.exports = {
     //   value: args,
     //   detail: ''
     // }])
-  },
-  execItem: function (item, event) {
-    console.log('executing item', item);
-    // let urlPatt = pluginConfig.url || 'https://www.bing.com/search/?q=%s'
-    shell.openItem(item.value)
-    event.sender.send('exec-item-reply')
-  }
-}
+    },
+    execItem(item, event) {
+        console.log('executing item', item);
+        // let urlPatt = pluginConfig.url || 'https://www.bing.com/search/?q=%s'
+        shell.openItem(item.value);
+        event.sender.send('exec-item-reply');
+    }
+};
 
 function handleCommand(args, event, cmdInfo) {
-    switch(cmdInfo.key) {
-        case 'learn':
+    switch (cmdInfo.key) {
+    case 'learn':
         handleLearnCommand(args, event, cmdInfo);
-          break;
-        case 'open':
+        break;
+    case 'open':
         handleOpenCommand(args, event, cmdInfo);
-          break;
-        default:
+        break;
+    default:
           // code block
-      }
+    }
 }
 
 function handleLearnCommand(args, event, cmdInfo) {
-    let name = args[0];
-    let preposition = args[1];
-    let url = args[2];
+    const name = args[0];
+    const preposition = args[1];
+    const url = args[2];
 
     console.log('args', args);
     console.log(`url ${url}`);
     console.log(`name ${name}`);
 
-    if (!url || !preposition || !name ){
+    if (!url || !preposition || !name) {
         return;
     }
 
     // TODO should be moved to JSON config of plugin as this is custom to MAC OS
-    let redirect = `
+    const redirect = `
     <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -79,7 +79,7 @@ function handleLearnCommand(args, event, cmdInfo) {
 </plist>
     `;
 
-    let filepath = `${dataPath}/${name}.${macOsShortcutExtension}`;
+    const filepath = `${dataPath}/${name}.${macOsShortcutExtension}`;
 
     console.log(`Writing file ${filepath}`);
 
@@ -89,22 +89,22 @@ function handleLearnCommand(args, event, cmdInfo) {
 
     event.sender.send('exec-reply', [{
         // TODO should be localized
-      name: `'${name}' saved.`,
-      // TODO we can define the icon in the plugin config, may be eaier
-      icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
-      value: filepath,
-      detail: ''
-    }])
+        name: `'${name}' saved.`,
+        // TODO we can define the icon in the plugin config, may be eaier
+        icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
+        value: filepath,
+        detail: ''
+    }]);
 }
 
 function handleOpenCommand(args, event, cmdInfo) {
-    let dir = fs.readdirSync(dataPath);
+    const dir = fs.readdirSync(dataPath);
 
     console.log(`loading files from ${dataPath}`);
 
-    if (!cmdInfo.args){
+    if (!cmdInfo.args) {
         // TODO return a proper message? like no results?
-        console.log(`empty args, returning`);
+        console.log('empty args, returning');
         return;
     }
 
@@ -115,14 +115,14 @@ function handleOpenCommand(args, event, cmdInfo) {
         return;
     }
 
-    let results = [];
+    const results = [];
 
     // es5
-    for(var i = 0, l = dir.length; i < l; i++) {
+    for (let i = 0, l = dir.length; i < l; i++) {
         var filePath = dir[i];
-        let fileExtension = path.extname(filePath);
-        var filename = path.basename(filePath, fileExtension);
         let isAMatch = cmdInfo.args.some(arg=>filePath.includes(arg));
+        const fileExtension = path.extname(filePath);
+        const filename = path.basename(filePath, fileExtension);
         // TODO in plugin config, add a list of files or extneions to be ignored.
         // e.g: .DS_STORE for mac os.
         if (isAMatch) {
@@ -133,12 +133,12 @@ function handleOpenCommand(args, event, cmdInfo) {
                 // icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
                 value: `${dataPath}/${filePath}`
                 // detail: ''
-              });
+            });
         }
         // console.log(filePath)
     }
 
-    event.sender.send('exec-reply', results)
+    event.sender.send('exec-reply', results);
 
     // // es6
     // for(let filePath of dir) {
