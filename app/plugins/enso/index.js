@@ -1,6 +1,6 @@
 import stringMatcher from './utils/stringMatcher';
+import electron from 'electron';
 
-const electron = require('electron');
 const shell = electron.shell;
 let pluginConfig;
 const fs = require('fs-extra');
@@ -75,7 +75,6 @@ function handleOpenCommand(args, event, cmdInfo) {
 
     const results = [];
 
-    // es5
     for (let i = 0, l = dir.length; i < l; i++) {
         const filePath = dir[i];
         const fileExtension = path.extname(filePath);
@@ -93,15 +92,9 @@ function handleOpenCommand(args, event, cmdInfo) {
                 // detail: ''
             });
         }
-        // console.log(filePath)
     }
 
     event.sender.send('exec-reply', results);
-
-    // // es6
-    // for(let filePath of dir) {
-    //     console.log(filePath);
-    // }
 }
 
 function handleCommand(args, event, cmdInfo) {
@@ -114,6 +107,7 @@ function handleCommand(args, event, cmdInfo) {
         break;
     default:
           // code block
+          // TODO handle this
     }
 }
 
@@ -122,27 +116,13 @@ export const setConfig = (pConfig) => {
 };
 
 export const exec = (args, event, cmdInfo) => {
-    // args = args.join(' ');
-
     console.log(`Enso plugin has received a command ${cmdInfo.key}`);
     console.log('Enso plugin has received some args', args);
-
     handleCommand(args, event, cmdInfo);
-
-    // try to grab text selected outside of app
-
-    // let engine = pluginConfig.engine?pluginConfig.engine:cmdInfo.key
-    // event.sender.send('exec-reply', [{
-    //   name: engine+' '+args,
-    //   icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
-    //   value: args,
-    //   detail: ''
-    // }])
 };
 
 export const execItem = (item, event) => {
     console.log('executing item', item);
-    // let urlPatt = pluginConfig.url || 'https://www.bing.com/search/?q=%s'
     shell.openItem(item.value);
     event.sender.send('exec-item-reply');
 };

@@ -63,8 +63,7 @@ function createPrefWindow() {
         height: 600,
         minWidth: 600,
         minHeight: 400,
-        // TODO ELaunch should be renamed
-        title: 'ELaunch Preferences',
+        title: 'Bert Preferences',
         autoHideMenuBar: !config.debug,
         backgroundColor: 'alpha(opacity=0)'
     });
@@ -85,13 +84,13 @@ function initTray() {
     // TODO replace icon
     tray = new Tray(path.normalize(`${__dirname}/../icon_16x16@2x.png`));
     const contextMenu = Menu.buildFromTemplate([{
-        label: 'Toggle ELaunch',
-        click(item, focusedWindow) {
+        label: 'Toggle Bert',
+        click() {
             toggleMainWindow();
         }
     }, {
         label: 'Preferences',
-        click(item, focusedWindow) {
+        click() {
             if (!prefWindow || prefWindow.isDestroyed()) {
                 createPrefWindow();
             } else {
@@ -101,24 +100,24 @@ function initTray() {
             }
         }
     }, {
-    // TODO update links
+        // TODO update links
         label: 'Bug Report',
-        click(item, focusedWindow) {
+        click() {
             electron.shell.openExternal('https://github.com/zaaack/ELaunch/issues');
         }
     }, {
         label: 'Help',
-        click(item, focusedWindow) {
+        click() {
             electron.shell.openExternal('https://github.com/zaaack/ELaunch#readme');
         }
     }, {
         label: 'Donate',
-        click(item, focusedWindow) {
+        click() {
             electron.shell.openExternal('https://github.com/zaaack/ELaunch#donate');
         }
     }, {
         label: 'Exit',
-        click(item, focusedWindow) {
+        click() {
             app.quit();
         }
     }]);
@@ -172,8 +171,10 @@ function makeSingleInstance() {
         app.quit();
     } else {
         app.on('second-instance', (event, commandLine, workingDirectory) => {
-            console.log(`second-instance invoked with commandLine '${commandLine}' and workingDirectory '${workingDirectory}'`);
-            // Someone tried to run a second instance, we should focus our window for visibility.
+            console.log(`second-instance invoked with commandLine '${commandLine}'
+                and workingDirectory '${workingDirectory}'`);
+            // Someone tried to run a second instance.
+            // We should focus our window for visibility.
             // This event handler will be called on the first instance.
             if (mainWindow) {
                 if (mainWindow.isMinimized()) {
