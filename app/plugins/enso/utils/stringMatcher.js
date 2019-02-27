@@ -8,8 +8,5 @@ export default {
             pattern = pattern.toUpperCase();
             return text.includes(pattern);
         });;
-    },
-    myMethod2() {
-      console.log('bar');
     }
 };
