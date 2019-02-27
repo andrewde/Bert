@@ -1,3 +1,4 @@
+import stringMatcher from './utils/stringMatcher';
 const electron = require('electron');
 const shell = electron.shell;
 const querystring = require('querystring');
@@ -120,9 +121,9 @@ function handleOpenCommand(args, event, cmdInfo) {
     // es5
     for (let i = 0, l = dir.length; i < l; i++) {
         var filePath = dir[i];
-        let isAMatch = cmdInfo.args.some(arg=>filePath.includes(arg));
         const fileExtension = path.extname(filePath);
         const filename = path.basename(filePath, fileExtension);
+        const isAMatch = stringMatcher.patternsMatchText(filePath, cmdInfo.args);;
         // TODO in plugin config, add a list of files or extneions to be ignored.
         // e.g: .DS_STORE for mac os.
         if (isAMatch) {
