@@ -1,4 +1,4 @@
-// sample configuration in `~/.ELaunch/config.js`
+// sample configuration in `~/.Bert/config.js`
 module.exports = {
   // other config properties
   plugins: {
