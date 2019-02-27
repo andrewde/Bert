@@ -1,253 +1,253 @@
-const electron = require('electron')
+const electron = require('electron');
 // Electron's App instance allows to control your application's event lifecycle.
-const { app, Tray, Menu, BrowserWindow } = electron
-const ipcMain = electron.ipcMain
-const plugin = require('../plugins')
-const config = require('../config')
-const path = require('path')
+const { app, Tray, Menu, BrowserWindow } = electron;
+const ipcMain = electron.ipcMain;
+const plugin = require('../plugins');
+const config = require('../config');
+const path = require('path');
 const { setPosition, setContentSize,
-  hideMainWindow, toggleMainWindow } = require('./winMgr').init(config)
-const shortcutMgr = require('./shortcutMgr')
+    hideMainWindow, toggleMainWindow } = require('./winMgr').init(config);
+const shortcutMgr = require('./shortcutMgr');
 
-let mainWindow
-let prefWindow
+let mainWindow;
+let prefWindow;
 
 function createMainWindow() {
-  mainWindow = new BrowserWindow({
-    width: config.width,
-    height: config.maxHeight,
-    resizable: config.debug,
-    title: config.title,
-    type: config.debug ? 'normal' : 'splash',
-    frame: config.debug,
-    skipTaskbar: !config.debug,
-    autoHideMenuBar: !config.debug,
-    backgroundColor: 'alpha(opacity=0)',
-    show: config.debug,
-    transparent: !config.debug,
-    alwaysOnTop: !config.debug,
-    disableAutoHideCursor: true,
-  })
+    mainWindow = new BrowserWindow({
+        width: config.width,
+        height: config.maxHeight,
+        resizable: config.debug,
+        title: config.title,
+        type: config.debug ? 'normal' : 'splash',
+        frame: config.debug,
+        skipTaskbar: !config.debug,
+        autoHideMenuBar: !config.debug,
+        backgroundColor: 'alpha(opacity=0)',
+        show: config.debug,
+        transparent: !config.debug,
+        alwaysOnTop: !config.debug,
+        disableAutoHideCursor: true
+    });
 
-  if (!config.debug) {
-    setContentSize(mainWindow, config.width, config.height, false);
-  }
-
-  setPosition(mainWindow, {
-    x: config.position && config.position.x,
-    y: config.position && config.position.y,
-    width: config.width,
-    height: config.maxHeight,
-  })
-
-  mainWindow.loadURL(`file://${__dirname}/../browser/search/index.html`)
-  mainWindow.on('closed', () => {
-    mainWindow = null
-  });
-
-  mainWindow.on('blur', () => {
     if (!config.debug) {
-      hideMainWindow()
+        setContentSize(mainWindow, config.width, config.height, false);
     }
-  })
 
-  config.context.mainWindow = mainWindow
+    setPosition(mainWindow, {
+        x: config.position && config.position.x,
+        y: config.position && config.position.y,
+        width: config.width,
+        height: config.maxHeight
+    });
+
+    mainWindow.loadURL(`file://${__dirname}/../browser/search/index.html`);
+    mainWindow.on('closed', () => {
+        mainWindow = null;
+    });
+
+    mainWindow.on('blur', () => {
+        if (!config.debug) {
+            hideMainWindow();
+        }
+    });
+
+    config.context.mainWindow = mainWindow;
 }
 
 /**
  * Create the preference window where user can tweak settings.
  */
 function createPrefWindow() {
-  prefWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    minWidth: 600,
-    minHeight: 400,
-    // TODO ELaunch should be renamed
-    title: 'ELaunch Preferences',
-    autoHideMenuBar: !config.debug,
-    backgroundColor: 'alpha(opacity=0)',
-  })
-  if (config.debug) {
-    prefWindow.loadURL('http://127.0.0.1:8080/');
-  } else {
-    prefWindow.loadURL(`file://${__dirname}/../browser/pref/index.html`);
-  }
-  setPosition(prefWindow)
+    prefWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        minWidth: 600,
+        minHeight: 400,
+        // TODO ELaunch should be renamed
+        title: 'ELaunch Preferences',
+        autoHideMenuBar: !config.debug,
+        backgroundColor: 'alpha(opacity=0)'
+    });
+    if (config.debug) {
+        prefWindow.loadURL('http://127.0.0.1:8080/');
+    } else {
+        prefWindow.loadURL(`file://${__dirname}/../browser/pref/index.html`);
+    }
+    setPosition(prefWindow);
 }
 
-let tray = null
+let tray = null;
 
 /**
  * Initialize the system tray icon and menu.
  */
 function initTray() {
-  // TODO replace icon
-  tray = new Tray(path.normalize(`${__dirname}/../icon_16x16@2x.png`))
-  const contextMenu = Menu.buildFromTemplate([{
-    label: 'Toggle ELaunch',
-    click(item, focusedWindow) {
-      toggleMainWindow()
-    },
-  }, {
-    label: 'Preferences',
-    click(item, focusedWindow) {
-      if (!prefWindow || prefWindow.isDestroyed()) {
-        createPrefWindow()
-      } else {
-        prefWindow.restore()
-        prefWindow.show()
-        prefWindow.focus()
-      }
-    },
-  }, {
+    // TODO replace icon
+    tray = new Tray(path.normalize(`${__dirname}/../icon_16x16@2x.png`));
+    const contextMenu = Menu.buildFromTemplate([{
+        label: 'Toggle ELaunch',
+        click(item, focusedWindow) {
+            toggleMainWindow();
+        }
+    }, {
+        label: 'Preferences',
+        click(item, focusedWindow) {
+            if (!prefWindow || prefWindow.isDestroyed()) {
+                createPrefWindow();
+            } else {
+                prefWindow.restore();
+                prefWindow.show();
+                prefWindow.focus();
+            }
+        }
+    }, {
     // TODO update links
-    label: 'Bug Report',
-    click(item, focusedWindow) {
-      electron.shell.openExternal('https://github.com/zaaack/ELaunch/issues')
-    },
-  }, {
-    label: 'Help',
-    click(item, focusedWindow) {
-      electron.shell.openExternal('https://github.com/zaaack/ELaunch#readme')
-    },
-  }, {
-    label: 'Donate',
-    click(item, focusedWindow) {
-      electron.shell.openExternal('https://github.com/zaaack/ELaunch#donate')
-    },
-  }, {
-    label: 'Exit',
-    click(item, focusedWindow) {
-      app.quit()
-    },
-  }]);
-  tray.setToolTip('ELaunch is running.')
-  tray.setContextMenu(contextMenu)
+        label: 'Bug Report',
+        click(item, focusedWindow) {
+            electron.shell.openExternal('https://github.com/zaaack/ELaunch/issues');
+        }
+    }, {
+        label: 'Help',
+        click(item, focusedWindow) {
+            electron.shell.openExternal('https://github.com/zaaack/ELaunch#readme');
+        }
+    }, {
+        label: 'Donate',
+        click(item, focusedWindow) {
+            electron.shell.openExternal('https://github.com/zaaack/ELaunch#donate');
+        }
+    }, {
+        label: 'Exit',
+        click(item, focusedWindow) {
+            app.quit();
+        }
+    }]);
+    tray.setToolTip('ELaunch is running.');
+    tray.setContextMenu(contextMenu);
 }
 
 function initMenu() { // init menu to fix copy/paste shortcut issue
-  if (process.platform !== 'darwin' || Menu.getApplicationMenu()) return
-  const template = [{
-    label: 'Edit',
-    submenu: [{
-      label: 'Undo',
-      accelerator: 'CmdOrCtrl+Z',
-      role: 'undo',
-    }, {
-      label: 'Redo',
-      accelerator: 'Shift+CmdOrCtrl+Z',
-      role: 'redo',
-    }, {
-      type: 'separator',
-    }, {
-      label: 'Cut',
-      accelerator: 'CmdOrCtrl+X',
-      role: 'cut',
-    }, {
-      label: 'Copy',
-      accelerator: 'CmdOrCtrl+C',
-      role: 'copy',
-    }, {
-      label: 'Paste',
-      accelerator: 'CmdOrCtrl+V',
-      role: 'paste',
-    }, {
-      label: 'Select All',
-      accelerator: 'CmdOrCtrl+A',
-      role: 'selectall',
-    }],
-  }]
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
+    if (process.platform !== 'darwin' || Menu.getApplicationMenu()) return;
+    const template = [{
+        label: 'Edit',
+        submenu: [{
+            label: 'Undo',
+            accelerator: 'CmdOrCtrl+Z',
+            role: 'undo'
+        }, {
+            label: 'Redo',
+            accelerator: 'Shift+CmdOrCtrl+Z',
+            role: 'redo'
+        }, {
+            type: 'separator'
+        }, {
+            label: 'Cut',
+            accelerator: 'CmdOrCtrl+X',
+            role: 'cut'
+        }, {
+            label: 'Copy',
+            accelerator: 'CmdOrCtrl+C',
+            role: 'copy'
+        }, {
+            label: 'Paste',
+            accelerator: 'CmdOrCtrl+V',
+            role: 'paste'
+        }, {
+            label: 'Select All',
+            accelerator: 'CmdOrCtrl+A',
+            role: 'selectall'
+        }]
+    }];
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
 }
 
 function makeSingleInstance() {
     console.log('in makeSingleInstance');
 
-    const gotTheLock = app.requestSingleInstanceLock()
+    const gotTheLock = app.requestSingleInstanceLock();
 
     if (!gotTheLock) {
         // This is not the first instance. Kill it.
-        app.quit()
+        app.quit();
     } else {
         app.on('second-instance', (event, commandLine, workingDirectory) => {
-            console.log(`second-instance invoked with commandLine '${commandLine}' and workingDirectory '${workingDirectory}'`)
+            console.log(`second-instance invoked with commandLine '${commandLine}' and workingDirectory '${workingDirectory}'`);
             // Someone tried to run a second instance, we should focus our window for visibility.
             // This event handler will be called on the first instance.
             if (mainWindow) {
-              if (mainWindow.isMinimized()) {
-                console.log('Main window minmimized, retoring it.');
-                mainWindow.restore();
-              }
-              console.log('Main window not in focus, focusing.');
-              mainWindow.focus();
+                if (mainWindow.isMinimized()) {
+                    console.log('Main window minmimized, retoring it.');
+                    mainWindow.restore();
+                }
+                console.log('Main window not in focus, focusing.');
+                mainWindow.focus();
             }
-        })
+        });
     }
 }
 
 function init() {
-  const shouldQuit = makeSingleInstance()
-  if (shouldQuit) {
-    console.error("Only one instance is allowed to run at a time");
-    app.quit()
-    return
-  }
-  if (!config.debug) {
-    if (app.dock) {
-        console.log('app is docked, invoking hide');
-        app.dock.hide();
+    const shouldQuit = makeSingleInstance();
+    if (shouldQuit) {
+        console.error('Only one instance is allowed to run at a time');
+        app.quit();
+        return;
     }
-  }
-  app.on('ready', () => {
-    createMainWindow()
-    shortcutMgr.registerAll()
-    initTray()
-    initMenu()
-
-    if (config.debug) {
-      createPrefWindow()
-    }
-    config.context.app = app
-
-    if (!config.language) {
-      config.set('language', app.getLocale())
-    }
-    config.emit('app-ready')
-  })
-  // Quit when all windows are closed.
-  app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-      app.quit();
-    }
-  })
-  app.on('activate', () => {
-    if (mainWindow === null) {
-      createMainWindow();
-    }
-  })
-  ipcMain.on('exec', (event, data) => {
-    console.log('Received exec event with data', data);
-    plugin.exec(data, event)
-  })
-  ipcMain.on('exec-item', (event, data) => {
-    plugin.execItem(data, event)
-  })
-  ipcMain.on('window-resize', (event, data) => {
-    const dataHeight = data.height || mainWindow.getContentSize()[1]
-    const height = Math.min(dataHeight, config.maxHeight)
-    const width = data.width || config.width
     if (!config.debug) {
-      setContentSize(mainWindow, width, height)
+        if (app.dock) {
+            console.log('app is docked, invoking hide');
+            app.dock.hide();
+        }
     }
-  })
-  ipcMain.on('hide', () => {
-    hideMainWindow()
-  })
+    app.on('ready', () => {
+        createMainWindow();
+        shortcutMgr.registerAll();
+        initTray();
+        initMenu();
+
+        if (config.debug) {
+            createPrefWindow();
+        }
+        config.context.app = app;
+
+        if (!config.language) {
+            config.set('language', app.getLocale());
+        }
+        config.emit('app-ready');
+    });
+    // Quit when all windows are closed.
+    app.on('window-all-closed', () => {
+        if (process.platform !== 'darwin') {
+            app.quit();
+        }
+    });
+    app.on('activate', () => {
+        if (mainWindow === null) {
+            createMainWindow();
+        }
+    });
+    ipcMain.on('exec', (event, data) => {
+        console.log('Received exec event with data', data);
+        plugin.exec(data, event);
+    });
+    ipcMain.on('exec-item', (event, data) => {
+        plugin.execItem(data, event);
+    });
+    ipcMain.on('window-resize', (event, data) => {
+        const dataHeight = data.height || mainWindow.getContentSize()[1];
+        const height = Math.min(dataHeight, config.maxHeight);
+        const width = data.width || config.width;
+        if (!config.debug) {
+            setContentSize(mainWindow, width, height);
+        }
+    });
+    ipcMain.on('hide', () => {
+        hideMainWindow();
+    });
 }
 
-module.exports = { init }
+module.exports = { init };
 
 // if (config.debug) {
 //   const installer = require('electron-devtools-installer')
