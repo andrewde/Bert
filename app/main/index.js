@@ -103,17 +103,17 @@ function initTray() {
         // TODO update links
         label: 'Bug Report',
         click() {
-            electron.shell.openExternal('https://github.com/zaaack/ELaunch/issues');
+            electron.shell.openExternal('http://bert.com/issues');
         }
     }, {
         label: 'Help',
         click() {
-            electron.shell.openExternal('https://github.com/zaaack/ELaunch#readme');
+            electron.shell.openExternal('http://bert.com/faq');
         }
     }, {
         label: 'Donate',
         click() {
-            electron.shell.openExternal('https://github.com/zaaack/ELaunch#donate');
+            electron.shell.openExternal('https://bert.com/donate');
         }
     }, {
         label: 'Exit',
@@ -121,7 +121,7 @@ function initTray() {
             app.quit();
         }
     }]);
-    tray.setToolTip('ELaunch is running.');
+    tray.setToolTip('Bert is running.');
     tray.setContextMenu(contextMenu);
 }
 
