@@ -84,10 +84,10 @@ function handleOpenCommand(args, event, cmdInfo) {
         // e.g: .DS_STORE for mac os.
         if (isAMatch) {
             results.push({
-                // TODO name should not include the file extension! only the name.
                 name: filename,
                 // TODO can we get the icon from the file itself?
-                // icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
+                // TODO if there is no icon provided, there is a cross displayed.
+                icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
                 value: `${dataPath}/${filePath}`
                 // detail: ''
             });
