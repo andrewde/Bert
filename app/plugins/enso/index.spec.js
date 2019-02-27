@@ -5,6 +5,7 @@ import { setConfig, exec } from './index';
 const fs = require('fs-extra');
 import * as sinon from 'sinon';
 
+// TODO move to __test__ directory
 describe('index test', () => {
     let sandbox;
 
