@@ -6,7 +6,7 @@ const fs = require('fs-extra');
 import * as sinon from 'sinon';
 
 // TODO move to __test__ directory
-describe('index test', () => {
+describe('enso plugin', () => {
     let sandbox;
 
     beforeEach(() => {
@@ -20,8 +20,8 @@ describe('index test', () => {
         sandbox.restore();
     });
 
-    describe('sayHello function', () => {
-        it('should say Hello guys!', () => {
+    describe('learn command', () => {
+        it('should learn command and create file appropriately', () => {
             // TODO should not be my user directory, use the OS thing
             const expectedFilePath = '/Users/detiffe/.berth/Enso/testName.webloc';
             const args = ['testName', 'as', 'uuu'];
@@ -49,6 +49,38 @@ describe('index test', () => {
             fs.unlink(expectedFilePath, () => {
                 expect(fs.existsSync(expectedFilePath)).to.be.false;
             });
+        });
+    });
+
+    describe('open command', () => {
+        it('should open command', () => {
+            // TODO mock files so that search can be conducted
+            // TODO should not be my user directory, use the OS thing
+            const args = ['testName', 'as', 'uuu'];
+            const event = {
+                sender: {
+                    send: sinon.stub()
+                }
+            };
+            const cmdInfo = {
+                key: 'open',
+                path: '',
+                args: ['banana'],
+                type: undefined,
+                plugin:
+                {
+                    path: '',
+                    commands: { learn: {}, open: {} },
+                    name: 'e',
+                    config: {}
+                },
+                config: {}
+            };
+            exec(args, event, cmdInfo);
+            // expect(fs.existsSync(expectedFilePath)).to.be.true;
+            // fs.unlink(expectedFilePath, () => {
+            //     expect(fs.existsSync(expectedFilePath)).to.be.false;
+            // });
         });
     });
 });
