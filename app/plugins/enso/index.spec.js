@@ -12,8 +12,7 @@ describe('enso plugin', () => {
     beforeEach(() => {
         sandbox = sinon.sandbox.create();
         const pluginConfig = {};
-        const globalConfig = {};
-        setConfig(pluginConfig, globalConfig);
+        setConfig(pluginConfig);
     });
 
     afterEach(() => {

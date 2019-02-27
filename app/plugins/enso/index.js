@@ -2,7 +2,6 @@ import stringMatcher from './utils/stringMatcher';
 
 const electron = require('electron');
 const shell = electron.shell;
-const querystring = require('querystring');
 let pluginConfig;
 const fs = require('fs-extra');
 const os = require('os');
@@ -13,50 +12,7 @@ const dataPath = `${os.homedir()}/.berth/Enso`;
 const macOsShortcutExtension = 'webloc';
 const path = require('path');
 
-module.exports = {
-    setConfig(pConfig, globalConfig) {
-        pluginConfig = pConfig;
-    },
-    exec(args, event, cmdInfo) {
-    // args = args.join(' ');
-
-        console.log(`Enso plugin has received a command ${cmdInfo.key}`);
-        console.log('Enso plugin has received some args', args);
-
-        handleCommand(args, event, cmdInfo);
-
-    // try to grab text selected outside of app
-
-    // let engine = pluginConfig.engine?pluginConfig.engine:cmdInfo.key
-    // event.sender.send('exec-reply', [{
-    //   name: engine+' '+args,
-    //   icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
-    //   value: args,
-    //   detail: ''
-    // }])
-    },
-    execItem(item, event) {
-        console.log('executing item', item);
-        // let urlPatt = pluginConfig.url || 'https://www.bing.com/search/?q=%s'
-        shell.openItem(item.value);
-        event.sender.send('exec-item-reply');
-    }
-};
-
-function handleCommand(args, event, cmdInfo) {
-    switch (cmdInfo.key) {
-    case 'learn':
-        handleLearnCommand(args, event, cmdInfo);
-        break;
-    case 'open':
-        handleOpenCommand(args, event, cmdInfo);
-        break;
-    default:
-          // code block
-    }
-}
-
-function handleLearnCommand(args, event, cmdInfo) {
+function handleLearnCommand(args, event) {
     const name = args[0];
     const preposition = args[1];
     const url = args[2];
@@ -147,3 +103,46 @@ function handleOpenCommand(args, event, cmdInfo) {
     //     console.log(filePath);
     // }
 }
+
+function handleCommand(args, event, cmdInfo) {
+    switch (cmdInfo.key) {
+    case 'learn':
+        handleLearnCommand(args, event);
+        break;
+    case 'open':
+        handleOpenCommand(args, event, cmdInfo);
+        break;
+    default:
+          // code block
+    }
+}
+
+export const setConfig = (pConfig) => {
+    pluginConfig = pConfig;
+};
+
+export const exec = (args, event, cmdInfo) => {
+    // args = args.join(' ');
+
+    console.log(`Enso plugin has received a command ${cmdInfo.key}`);
+    console.log('Enso plugin has received some args', args);
+
+    handleCommand(args, event, cmdInfo);
+
+    // try to grab text selected outside of app
+
+    // let engine = pluginConfig.engine?pluginConfig.engine:cmdInfo.key
+    // event.sender.send('exec-reply', [{
+    //   name: engine+' '+args,
+    //   icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
+    //   value: args,
+    //   detail: ''
+    // }])
+};
+
+export const execItem = (item, event) => {
+    console.log('executing item', item);
+    // let urlPatt = pluginConfig.url || 'https://www.bing.com/search/?q=%s'
+    shell.openItem(item.value);
+    event.sender.send('exec-item-reply');
+};
