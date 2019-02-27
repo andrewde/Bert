@@ -51,9 +51,8 @@ module.exports = {
     filename: '[name].bundle.js', // 输出的文件名，[name]就是entry的key
   },
 
-  // 模块加载器
   module: {
-    loaders: [ // 加载器数组
+    loaders: [
       {
         test: /\.(png|jpg|jpeg|gif|ttf|eot|woff|woff2|svg)(?:\?.*?){0,1}$/, // 用来匹配文件的正则
         // 加载器的名称，此处为url-loader,`?`后面可以添加loader的参数，
@@ -87,7 +86,7 @@ module.exports = {
   "babel": {
     "presets": [
       "electron", // uglifyjs can't handle es6 syntx
-      // "es2015",
+    //   "es2015",
       // "stage-0",
       "react"
     ],
