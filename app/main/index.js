@@ -12,7 +12,6 @@ const shortcutMgr = require('./shortcutMgr')
 let mainWindow
 let prefWindow
 
-
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: config.width,
@@ -165,19 +164,27 @@ function initMenu() { // init menu to fix copy/paste shortcut issue
 
 function makeSingleInstance() {
     console.log('in makeSingleInstance');
-  return app.makeSingleInstance((commandLine, workingDirectory) => {
-    console.log(`Callback on primary app invoked with commandLine '${commandLine}' and workingDirectory '${workingDirectory}'`)
-    // Another instance of the app is executing.
-    // Make the primary window focused and non-minimized.
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) {
-        console.log('Main window minmimized, retoring it.');
-        mainWindow.restore();
-      }
-      console.log('Main window not in focus, focusing.');
-      mainWindow.focus();
+
+    const gotTheLock = app.requestSingleInstanceLock()
+
+    if (!gotTheLock) {
+        // This is not the first instance. Kill it.
+        app.quit()
+    } else {
+        app.on('second-instance', (event, commandLine, workingDirectory) => {
+            console.log(`second-instance invoked with commandLine '${commandLine}' and workingDirectory '${workingDirectory}'`)
+            // Someone tried to run a second instance, we should focus our window for visibility.
+            // This event handler will be called on the first instance.
+            if (mainWindow) {
+              if (mainWindow.isMinimized()) {
+                console.log('Main window minmimized, retoring it.');
+                mainWindow.restore();
+              }
+              console.log('Main window not in focus, focusing.');
+              mainWindow.focus();
+            }
+        })
     }
-  })
 }
 
 function init() {
