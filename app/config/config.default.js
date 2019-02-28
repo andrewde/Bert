@@ -144,20 +144,40 @@ module.exports = {
         config: {
             darwin: {
                 shortcutFile : {
+                    // The extension of the file to create.
+                    // .url files are cross-platform URL shortcut files.
+                    extension: '.url',
                     // The file template
                     template:
                         '[InternetShortcut]'
                         + '\n'
-                        + 'URL={{url}}',
+                        + 'URL={{url}}'
+                        // The very last line feed matters!
+                        // Safari is picky about that and the lack of it will result in sporadic empty window.
+                        + '\n',
                     // The placeholder to replace by the actual file content
-                    placeholder: '{{url}}',
-                    // The extension of the file to create
-                    extension: '.url'
+                    placeholder: '{{url}}'
                 },
             },
             linux: {
+                extension: '.url',
+                template:
+                    '[InternetShortcut]'
+                    + '\n'
+                    + 'URL={{url}}'
+                    + '\n',
+                placeholder: '{{url}}'
             },
             win32: {
+                shortcutFile : {
+                    extension: '.url',
+                    template:
+                        '[InternetShortcut]'
+                        + '\n'
+                        + 'URL={{url}}'
+                        + '\n',
+                    placeholder: '{{url}}'
+                },
             },
           },
         commands: {
