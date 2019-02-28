@@ -25,25 +25,18 @@ function handleLearnCommand(args, event) {
         return;
     }
 
-    // TODO should be moved to JSON config of plugin as this is custom to MAC OS
-    const redirect = `
-    <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>URL</key>
-	<string>${url}</string>
-</dict>
-</plist>
-    `;
-
-    const filepath = `${dataPath}/${name}.${macOsShortcutExtension}`;
+    const platform = process.platform;
+    console.log(`platform is ${platform}`);
+    const shortcutFile = pluginConfig[platform].shortcutFile;
+    const filepath = `${dataPath}/${name}${shortcutFile.extension}`;
 
     console.log(`Writing file ${filepath}`);
 
     // TODO if the directory does not exist it will just crash.
     //  Error: ENOENT: no such file or director
-    fs.writeFileSync(filepath, redirect, 'utf-8');
+    // TODO Make sure  that the string returned by teplace is a new one
+    // so that we do not edit the config itself!
+    fs.writeFileSync(filepath, shortcutFile.template.replace(shortcutFile.placeholder, url), 'utf-8');
 
     event.sender.send('exec-reply', [{
         // TODO should be localized
@@ -113,6 +106,7 @@ function handleCommand(args, event, cmdInfo) {
 
 export const setConfig = (pConfig) => {
     pluginConfig = pConfig;
+    console.log('plugin config set to ', pluginConfig);
 };
 
 export const exec = (args, event, cmdInfo) => {

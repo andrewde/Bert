@@ -11,7 +11,16 @@ describe('enso plugin', () => {
 
     beforeEach(() => {
         sandbox = sinon.sandbox.create();
-        const pluginConfig = {};
+        const pluginConfig = {
+            // The platform has been mocked to 'testPlatform' in 'context-setup.js'
+            testPlatform: {
+                shortcutFile : {
+                    template: 'Test content here: {{content}}',
+                    placeholder: '{{content}}',
+                    extension: '.url'
+                },
+            }
+        };
         setConfig(pluginConfig);
     });
 
@@ -22,8 +31,8 @@ describe('enso plugin', () => {
     describe('learn command', () => {
         it('should learn command and create file appropriately', () => {
             // TODO should not be my user directory, use the OS thing
-            const expectedFilePath = '/Users/detiffe/.berth/Enso/testName.webloc';
-            const args = ['testName', 'as', 'uuu'];
+            const expectedFilePath = '/Users/detiffe/.berth/Enso/test.url';
+            const args = ['test', 'as', 'http://example.com'];
             const event = {
                 sender: {
                     send: sinon.stub()

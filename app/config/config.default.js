@@ -138,8 +138,28 @@ module.exports = {
         calc: {},
       },
     },
+    // TODO can we just rename it to enso?
     e: {
         path: `${__dirname}/../plugins/enso/index.js`,
+        config: {
+            darwin: {
+                shortcutFile : {
+                    // The file template
+                    template:
+                        '[InternetShortcut]'
+                        + '\n'
+                        + 'URL={{url}}',
+                    // The placeholder to replace by the actual file content
+                    placeholder: '{{url}}',
+                    // The extension of the file to create
+                    extension: '.url'
+                },
+            },
+            linux: {
+            },
+            win32: {
+            },
+          },
         commands: {
           learn: {
             // engine: 'Bing',
