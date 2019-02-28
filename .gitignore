@@ -44,3 +44,4 @@ common.missing.json
 app/browser/pref/index.html
 app/browser/search/css/style.css.map
 package-lock.json
+.vscode
