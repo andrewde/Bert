@@ -1,3 +1,5 @@
+// TODO what is this used for?
+// Everything is in app/config/config.default.js noh?
 module.exports = {
     // other config properties
     plugins: {
