@@ -7,9 +7,6 @@ const fs = require('fs-extra');
 const os = require('os');
 // On purpose not using constant file to keep this plugin standalone.
 const dataPath = `${os.homedir()}/.berth/Enso`;
-// TODO should be moved to JSON config of plugin as this is custom to MAC OS
-// TODO what about windows and linux?!
-const macOsShortcutExtension = 'webloc';
 const path = require('path');
 
 function handleLearnCommand(args, event) {
@@ -36,7 +33,8 @@ function handleLearnCommand(args, event) {
     //  Error: ENOENT: no such file or director
     // TODO Make sure  that the string returned by teplace is a new one
     // so that we do not edit the config itself!
-    fs.writeFileSync(filepath, shortcutFile.template.replace(shortcutFile.placeholder, url), 'utf-8');
+    const fileContent = shortcutFile.template.replace(shortcutFile.placeholder, url);
+    fs.writeFileSync(filepath, fileContent, 'utf-8');
 
     event.sender.send('exec-reply', [{
         // TODO should be localized

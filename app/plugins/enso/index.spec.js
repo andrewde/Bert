@@ -14,11 +14,11 @@ describe('enso plugin', () => {
         const pluginConfig = {
             // The platform has been mocked to 'testPlatform' in 'context-setup.js'
             testPlatform: {
-                shortcutFile : {
+                shortcutFile: {
                     template: 'Test content here: {{content}}',
                     placeholder: '{{content}}',
                     extension: '.url'
-                },
+                }
             }
         };
         setConfig(pluginConfig);
