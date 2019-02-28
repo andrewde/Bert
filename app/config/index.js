@@ -18,6 +18,7 @@ let rawConfig = {}
 
 let isFreshInstalled = false
 
+// A frozen object can no longer be changed.
 Object.freeze(defaultConfig)
 
 function writeConfig() {
