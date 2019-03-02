@@ -20,7 +20,7 @@
     "name": ""
   },
   "scripts": {
-    "build": "npm run lint:js && npm run compile",
+    "build": "npm run lint:js && npm run test && npm run compile",
     "compile": "rm -rf build && ./node_modules/.bin/electron-rebuild",
     "lint:js-all": "node_modules/.bin/eslint **/*.js",
     "lint:js": "node_modules/.bin/eslint \"app/plugins/enso/**/*.{js,jsx}\" && node_modules/.bin/eslint \"./app/main/index.js\" && node_modules/.bin/eslint \"./app/config/config.default.js\"",
