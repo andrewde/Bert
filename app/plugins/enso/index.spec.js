@@ -1,5 +1,7 @@
 import { expect } from 'chai';
 import { setConfig, exec } from './index';
+import os from 'os';
+
 // TODO use import as below instead of require
 // import * as fs from 'fs-extra'
 const fs = require('fs-extra');
@@ -30,8 +32,8 @@ describe('enso plugin', () => {
 
     describe('learn command', () => {
         it('should learn command and create file appropriately', () => {
-            // TODO should not be my user directory, use the OS thing
-            const expectedFilePath = '/Users/detiffe/.berth/Enso/test.url';
+            const expectedFilePath = `${os.homedir()}/.berth/Enso/test.url`;
+
             const args = ['test', 'as', 'http://example.com'];
             const event = {
                 sender: {
@@ -40,6 +42,7 @@ describe('enso plugin', () => {
             };
             const cmdInfo = {
                 key: 'learn',
+                // TODO these path can be removed right
                 path: '/workspaces/Berthe/app/plugins/enso/index.js',
                 args: ['ppppp', 'as', 'y'],
                 type: undefined,
@@ -53,6 +56,7 @@ describe('enso plugin', () => {
                 config: {}
             };
             exec(args, event, cmdInfo);
+            // TODO on top of checking if file exists, check the content against an expected file.
             expect(fs.existsSync(expectedFilePath)).to.be.true;
             fs.unlink(expectedFilePath, () => {
                 expect(fs.existsSync(expectedFilePath)).to.be.false;
