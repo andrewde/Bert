@@ -1,10 +1,10 @@
 import stringMatcher from './utils/stringMatcher';
 import electron from 'electron';
+import os from 'os';
 
 const shell = electron.shell;
 let pluginConfig;
 const fs = require('fs-extra');
-const os = require('os');
 // On purpose not using constant file to keep this plugin standalone.
 const dataPath = `${os.homedir()}/.berth/Enso`;
 const path = require('path');
