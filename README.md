@@ -56,64 +56,6 @@ Notice: after you edit your config, you need to reload config(on tray menu) or r
 
 Then you can type in app names or commands, see [Screen Captures](#screen-captures) below.
 
-# Install plugins
-
-You can find a plugin list on [wiki](https://github.com/zaaack/ELaunch/wiki).
-
-```sh
-cd ~/.ELaunch
-npm i <package name of the plugin> --save
-```
-or
-
-```sh
-cd ~/.ELaunch
-mkdir node_modules
-cd node_modules
-git clone --depth 1 <repository url of the plugin>
-```
-Then, edit your ELaunch config file (path: `~/.ELaunch/config.js`),
-add this plugin in plugins field, something like this:
-```js
-module.exports = {
-  //... other config fields
-  plugins: {
-    //... config for other plugins
-    devdocs: {
-      path: `<path to the plugin>`,
-      command: {
-        `<command of the plugin>`: {}
-      }
-    }
-  }
-}
-```
-
-Then, restart ELaunch or click `Reload config` on tray menu to reload the config file.
-
-
-## Develop
-
-You need install [nodejs](https://nodejs.org/en/) first, than run commands below
-```sh
-git clone https://github.com/zaaack/ELaunch.git
-cd ELaunch/app && npm i
-cd ../ && npm i
-
-# build native modules (node-inspector)
-./node_modules/.bin/electron-rebuild
-
-```
-then you can start it by
-```sh
-npm start
-```
-or
-```sh
-npm i -g electron-prebuilt
-electron ./app/index.js
-```
-
 ## Debug
 
 see: http://electron.atom.io/docs/tutorial/debugging-main-process/
@@ -132,6 +74,10 @@ see [electron-builder](https://github.com/electron-userland/electron-builder)
 ```js
 npm run dist
 ```
+
+Notes:
+
+I was getting a bunch of errors, switched to `node/8.12.0` and all of my issues got fixed.
 
 ### More details
 
