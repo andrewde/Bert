@@ -68,9 +68,13 @@ function createPrefWindow() {
         backgroundColor: 'alpha(opacity=0)'
     });
     if (config.debug) {
-        prefWindow.loadURL('http://127.0.0.1:8080/');
+        const url = 'http://127.0.0.1:8080/';
+        console.log(`about to load preferences from '${url}'`);
+        prefWindow.loadURL();
     } else {
-        prefWindow.loadURL(`file://${__dirname}/../browser/pref/index.html`);
+        const url = `file://${__dirname}/../browser/pref/index.html`;
+        console.log(`about to load preferences from '${url}'`);
+        prefWindow.loadURL(url);
     }
     setPosition(prefWindow);
 }
