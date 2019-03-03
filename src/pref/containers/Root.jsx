@@ -12,6 +12,7 @@ export default class Root extends React.Component {
     let devTools
 
     if (process.env.NODE_ENV === 'development') {
+        // TODO andrew what is that?
       /* eslint-disable */
       const DevTools = require('./DevTools').default
       devTools = <DevTools />
