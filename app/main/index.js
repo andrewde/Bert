@@ -1,4 +1,5 @@
 const electron = require('electron');
+import { enableLiveReload } from 'electron-compile';
 // Electron's App instance allows to control your application's event lifecycle.
 const { app, Tray, Menu, BrowserWindow } = electron;
 const ipcMain = electron.ipcMain;
@@ -13,6 +14,7 @@ let mainWindow;
 let prefWindow;
 
 function createMainWindow() {
+    enableLiveReload();
     mainWindow = new BrowserWindow({
         width: config.width,
         height: config.maxHeight,
@@ -93,6 +95,7 @@ function initTray() {
             toggleMainWindow();
         }
     }, {
+        // TODO this could be disabled as it does not work
         label: 'Preferences',
         click() {
             if (!prefWindow || prefWindow.isDestroyed()) {
