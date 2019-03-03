@@ -23,7 +23,7 @@
     "lint:js-all": "node_modules/.bin/eslint **/*.js",
     "lint:js": "node_modules/.bin/eslint \"app/plugins/enso/**/*.{js,jsx}\" && node_modules/.bin/eslint \"./app/main/index.js\" && node_modules/.bin/eslint \"./app/config/config.default.js\"",
     "lint-fix": "node_modules/.bin/eslint --fix --ext .js ./app/plugins/enso/",
-    "start": "npm run lint:js && npm run test && electron-forge start",
+    "start": "npm run lint:js && npm run test && cross-env NODE_ENV=development electron-forge start",
     "debug": "cross-env NODE_ENV=development electron ./app/index.js --debug=5858",
     "debug-brk": "electron ./app/index.js --debug-brk=5858",
     "inspect": "cross-env ELECTRON_RUN_AS_NODE=true electron node_modules/node-inspector/bin/inspector.js",
