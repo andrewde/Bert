@@ -4,25 +4,41 @@ const os = require('os');
 const child = require('child_process')
 const config = require('../config')
 
+// TODO what are these commented lines?
 // let lastUpdateTime = 0
 // let lastExecTime = 0
 // let isUpdateing = false
 // let isExecing = false
 let pluginMap
 
+//TODO what is that comment?
 /*
 node command: ELECTRON_RUN_AS_NODE=true `${process.execPath}`
  */
 
+/**
+ * Get plugin from Node's "require.cache" or load it up via "require" and initialize it.
+ * https://nodejs.org/api/modules.html#modules_require_cache
+ */
 function getPlugin(pluginInfo) {
+
   console.log(`getPlugin for plugin name ${pluginInfo.name}`);
 
   const pluginFile = path.normalize(pluginInfo.path)
+  // Check if the plugin has been previously imported or not.
+  // Once you call require(<module path>), the module is saved in require.cache.
+  // Key = path, value = metadata about the module.
   const pluginIsRequiredBefore = !!require.cache[pluginFile]
+  // Safe to call require multiple times for the same module/path.
+  // Subsequent calls to require for the same module/path
+  // will load the same object that was loaded by the first require.
   const plugin = require(pluginFile)
+
+  console.log(`pluginIsRequiredBefore ${pluginIsRequiredBefore}`);
 
   if (!pluginIsRequiredBefore) {
     try {
+      console.log(`Plugin '${pluginInfo.name}' of path '${pluginInfo.path}' needs to be initialized.`);
       // init once
       plugin.init && plugin.init(pluginInfo.config, config, config.context)
       // setConfig was declared
