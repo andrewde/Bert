@@ -3,6 +3,7 @@ let path = require('path');
 const os = require('os');
 const child = require('child_process')
 const config = require('../config')
+import logger from '../utils/logger';
 
 // TODO what are these commented lines?
 // let lastUpdateTime = 0
@@ -22,7 +23,7 @@ node command: ELECTRON_RUN_AS_NODE=true `${process.execPath}`
  */
 function getPlugin(pluginInfo) {
 
-  console.log(`getPlugin for plugin name ${pluginInfo.name}`);
+  logger.log(`getPlugin for plugin name ${pluginInfo.name}`);
 
   const pluginFile = path.normalize(pluginInfo.path)
   // Check if the plugin has been previously imported or not.
@@ -34,11 +35,11 @@ function getPlugin(pluginInfo) {
   // will load the same object that was loaded by the first require.
   const plugin = require(pluginFile)
 
-  console.log(`pluginIsRequiredBefore ${pluginIsRequiredBefore}`);
+  logger.log(`pluginIsRequiredBefore ${pluginIsRequiredBefore}`);
 
   if (!pluginIsRequiredBefore) {
     try {
-      console.log(`Plugin '${pluginInfo.name}' of path '${pluginInfo.path}' needs to be initialized.`);
+      logger.log(`Plugin '${pluginInfo.name}' of path '${pluginInfo.path}' needs to be initialized.`);
       // init once
       plugin.init && plugin.init(pluginInfo.config, config, config.context)
       // setConfig was declared
@@ -58,7 +59,7 @@ function getMergedPluginInfo(pluginInfo, cmdConfig) {
     pluginInfo.config, pluginInfo.config[platform],
     cmdConfig, cmdConfig[platform])
 
-  // console.log(mergedCmdConfig);
+  // logger.log(mergedCmdConfig);
   const mergedPluginInfo = config.merge({}, pluginInfo, {
     config: mergedCmdConfig
   })
@@ -67,10 +68,10 @@ function getMergedPluginInfo(pluginInfo, cmdConfig) {
 }
 
 function loadPluginMap() {
-  console.log('loading plugin map');
+  logger.log('loading plugin map');
   pluginMap = {}
   Object.keys(config.plugins).forEach(pluginName => {
-    console.log(`loading plugin ${pluginName} and creating pluginInfo from its definition`);
+    logger.log(`loading plugin ${pluginName} and creating pluginInfo from its definition`);
     const pluginInfo = config.plugins[pluginName]
     pluginInfo.name = pluginName
     const cmdConfigMap = pluginInfo.commands || { [pluginName]: {} }
@@ -90,24 +91,24 @@ function loadPluginMap() {
       }
     }
   })
-    // console.log(pluginMap);
+    // logger.log(pluginMap);
 }
 
-// console.log(pluginMap);
+// logger.log(pluginMap);
 config.on('app-ready', loadPluginMap) // make config ready before set plugin config
 config.on('reload-config', loadPluginMap)
 
 function parseCmd(data) {
-  console.log(`Parsing cmd ${data.cmd}`);
+  logger.log(`Parsing cmd ${data.cmd}`);
   const args = data.cmd.split(' ')
   let key = 'app'
   // ("something" in {"a string":"", "something":"", "another string":""}) > yes
   if (args.length > 1 && (args[0] in pluginMap)) {
     // remove the first cell of array and return it
     key = args.shift()
-    console.log(`plucked key '${key}' from args`, key);
+    logger.log(`plucked key '${key}' from args`, key);
   } else {
-    console.log('plugin cannot be inferred from command, using default plugin from pluginMap');
+    logger.log('plugin cannot be inferred from command, using default plugin from pluginMap');
     key = Object.keys(pluginMap).find(k => pluginMap[k].default)
   }
   const plugin = pluginMap[key]
@@ -119,10 +120,10 @@ function parseCmd(data) {
     plugin: plugin,
     config: plugin.config || {}
   }
-  console.log('cmd args', result.args);
-  console.log('cmd plugin type', result.type);
-  console.log('cmd plugin name', result.plugin.name);
-  console.log('cmd plugin path', result.plugin.path);
+  logger.log('cmd args', result.args);
+  logger.log('cmd plugin type', result.type);
+  logger.log('cmd plugin name', result.plugin.name);
+  logger.log('cmd plugin path', result.plugin.path);
 
   return result;
 }
@@ -131,7 +132,7 @@ module.exports = {
     const cmdInfo = parseCmd(data)
     const plugin = getPlugin(cmdInfo.plugin)
     try {
-      console.log('calling plugin');
+      logger.log('calling plugin');
       plugin.exec(cmdInfo.args, event, cmdInfo)
     } catch (e) {
       console.error('Plugin [%s] exec failed!', cmdInfo.plugin.name, e)
