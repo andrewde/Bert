@@ -1,6 +1,7 @@
 import stringMatcher from './utils/stringMatcher';
 import electron from 'electron';
 import os from 'os';
+import logger from '../utils/logger';
 
 const shell = electron.shell;
 let pluginConfig;
@@ -14,20 +15,20 @@ function handleLearnCommand(args, event) {
     const preposition = args[1];
     const url = args[2];
 
-    console.log('args', args);
-    console.log(`url ${url}`);
-    console.log(`name ${name}`);
+    logger.log('args', args);
+    logger.log(`url ${url}`);
+    logger.log(`name ${name}`);
 
     if (!url || !preposition || !name) {
         return;
     }
 
     const platform = process.platform;
-    console.log(`platform is ${platform}`);
+    logger.log(`platform is ${platform}`);
     const shortcutFile = pluginConfig[platform].shortcutFile;
     const filepath = `${dataPath}/${name}${shortcutFile.extension}`;
 
-    console.log(`Writing file ${filepath}`);
+    logger.log(`Writing file ${filepath}`);
 
     // TODO if the directory does not exist it will just crash.
     //  Error: ENOENT: no such file or director
@@ -49,18 +50,18 @@ function handleLearnCommand(args, event) {
 function handleOpenCommand(args, event, cmdInfo) {
     const dir = fs.readdirSync(dataPath);
 
-    console.log(`loading files from ${dataPath}`);
+    logger.log(`loading files from ${dataPath}`);
 
     if (!cmdInfo.args) {
         // TODO return a proper message? like no results?
-        console.log('empty args, returning');
+        logger.log('empty args, returning');
         return;
     }
 
     if (!dir) {
         // TODO create diretcory
         // TODO then return a proper message? like no results?
-        console.log(`directory ${dataPath} does not exist, returning`);
+        logger.log(`directory ${dataPath} does not exist, returning`);
         return;
     }
 
@@ -104,17 +105,17 @@ function handleCommand(args, event, cmdInfo) {
 
 export const setConfig = (pConfig) => {
     pluginConfig = pConfig;
-    console.log('plugin config set to ', pluginConfig);
+    logger.log('plugin config set to ', pluginConfig);
 };
 
 export const exec = (args, event, cmdInfo) => {
-    console.log(`Enso plugin has received a command ${cmdInfo.key}`);
-    console.log('Enso plugin has received some args', args);
+    logger.log(`Enso plugin has received a command ${cmdInfo.key}`);
+    logger.log('Enso plugin has received some args', args);
     handleCommand(args, event, cmdInfo);
 };
 
 export const execItem = (item, event) => {
-    console.log('executing item', item);
+    logger.log('executing item', item);
     shell.openItem(item.value);
     event.sender.send('exec-item-reply');
 };
