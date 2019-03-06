@@ -102,8 +102,6 @@ Create a directory build in the root of the project and save a background.png (m
 
 ![](https://raw.githubusercontent.com/zaaack/ELaunch/master/docs/captures/search.jpg)
 
-
-
 ### Plugin shell
 
 #### node
