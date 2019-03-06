@@ -21,7 +21,7 @@
   },
   "scripts": {
     "lint:js-all": "node_modules/.bin/eslint **/*.js",
-    "lint:js": "node_modules/.bin/eslint \"app/plugins/enso/**/*.{js,jsx}\" && node_modules/.bin/eslint \"./app/main/index.js\" && node_modules/.bin/eslint \"./app/config/config.default.js\" && node_modules/.bin/eslint \"./app/utils/logger.js\"",
+    "lint:js": "node_modules/.bin/eslint \"app/plugins/enso/**/*.{js,jsx}\" && node_modules/.bin/eslint \"./app/main/index.js\" && node_modules/.bin/eslint \"./app/config/config.default.js\" && node_modules/.bin/eslint \"./app/utils/**/*.{js,jsx}\"",
     "lint-fix": "node_modules/.bin/eslint --fix --ext .js ./app/plugins/enso/",
     "start": "npm run lint:js && npm run test && cross-env NODE_ENV=development electron-forge start",
     "debug": "cross-env NODE_ENV=development electron ./app/index.js --debug=5858",
