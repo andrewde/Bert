@@ -7,5 +7,8 @@ import log from 'electron-log';
 export default {
     log(text) {
         log.debug(text);
+    },
+    error(text) {
+        log.error(text);
     }
 };

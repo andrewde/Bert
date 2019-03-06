@@ -1,4 +1,5 @@
 const electron = require('electron');
+import logger from '../utils/logger';
 import { enableLiveReload } from 'electron-compile';
 // Electron's App instance allows to control your application's event lifecycle.
 const { app, Tray, Menu, BrowserWindow } = electron;
@@ -71,11 +72,11 @@ function createPrefWindow() {
     });
     if (config.debug) {
         const url = 'http://127.0.0.1:8080/';
-        console.log(`about to load preferences from '${url}'`);
+        logger.log(`about to load preferences from '${url}'`);
         prefWindow.loadURL();
     } else {
         const url = `file://${__dirname}/../browser/pref/index.html`;
-        console.log(`about to load preferences from '${url}'`);
+        logger.log(`about to load preferences from '${url}'`);
         prefWindow.loadURL(url);
     }
     setPosition(prefWindow);
@@ -169,7 +170,7 @@ function initMenu() { // init menu to fix copy/paste shortcut issue
 }
 
 function makeSingleInstance() {
-    console.log('in makeSingleInstance');
+    logger.log('in makeSingleInstance');
 
     const gotTheLock = app.requestSingleInstanceLock();
 
@@ -178,17 +179,17 @@ function makeSingleInstance() {
         app.quit();
     } else {
         app.on('second-instance', (event, commandLine, workingDirectory) => {
-            console.log(`second-instance invoked with commandLine '${commandLine}'
+            logger.log(`second-instance invoked with commandLine '${commandLine}'
                 and workingDirectory '${workingDirectory}'`);
             // Someone tried to run a second instance.
             // We should focus our window for visibility.
             // This event handler will be called on the first instance.
             if (mainWindow) {
                 if (mainWindow.isMinimized()) {
-                    console.log('Main window minmimized, retoring it.');
+                    logger.log('Main window minmimized, retoring it.');
                     mainWindow.restore();
                 }
-                console.log('Main window not in focus, focusing.');
+                logger.log('Main window not in focus, focusing.');
                 mainWindow.focus();
             }
         });
@@ -198,13 +199,13 @@ function makeSingleInstance() {
 function init() {
     const shouldQuit = makeSingleInstance();
     if (shouldQuit) {
-        console.error('Only one instance is allowed to run at a time');
+        logger.error('Only one instance is allowed to run at a time');
         app.quit();
         return;
     }
     if (!config.debug) {
         if (app.dock) {
-            console.log('app is docked, invoking hide');
+            logger.log('app is docked, invoking hide');
             app.dock.hide();
         }
     }
@@ -236,7 +237,7 @@ function init() {
         }
     });
     ipcMain.on('exec', (event, data) => {
-        console.log('Received exec event with data', data);
+        logger.log('Received exec event with data', data);
         plugin.exec(data, event);
     });
     ipcMain.on('exec-item', (event, data) => {
@@ -263,6 +264,6 @@ module.exports = { init };
 //   const { REACT_DEVELOPER_TOOLS } = installer
 //
 //   installExtension(REACT_DEVELOPER_TOOLS)
-//       .then((name) => console.log(`Added Extension:  ${name}`))
-//       .catch((err) => console.log('An error occurred: ', err))
+//       .then((name) => logger.log(`Added Extension:  ${name}`))
+//       .catch((err) => logger.log('An error occurred: ', err))
 // }
