@@ -44,4 +44,7 @@ common.missing.json
 app/browser/pref/index.html
 app/browser/search/css/style.css.map
 package-lock.json
+yarn.lock
 .vscode
+# Exclude diretcory where installers are built into.
+./out
