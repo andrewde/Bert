@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const os = require('os')
+import os from 'os';
 
 // init symlinks
 // TODO udate naee
