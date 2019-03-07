@@ -1,4 +1,4 @@
-const fs = require('fs-extra');
+import * as fs from 'fs-extra';
 const shell = require('electron').shell;
 const globule = require('globule');
 const update = require('./update');

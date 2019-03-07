@@ -1,6 +1,6 @@
 const path = require('path');
 const child = require('child_process');
-const fs = require('fs-extra');
+import * as fs from 'fs-extra';
 const shell = require('electron').shell;
 const globule = require('globule');
 const chokidar = require('chokidar');

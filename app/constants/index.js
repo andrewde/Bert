@@ -1,12 +1,12 @@
 import os from 'os';
-const appName = 'bert'
+import logger from '../utils/logger';
 const debug = process.argv.some(value => value.includes('--debug'))
 const dataPath = `${os.homedir()}/.${appName}`
 const userConfigFile = `${dataPath}/config.json5`
 
-console.log(`debug is ${debug}`);
-console.log(`dataPath is ${dataPath}`);
-console.log(`userConfigFile is ${userConfigFile}`);
+logger.log(`debug is ${debug}`);
+logger.log(`dataPath is ${dataPath}`);
+logger.log(`userConfigFile is ${userConfigFile}`);
 
 module.exports = {
   debug,

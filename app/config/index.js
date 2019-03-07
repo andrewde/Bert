@@ -1,4 +1,4 @@
-const fs = require('fs-extra');
+import * as fs from 'fs-extra';
 const JSON5 = require('json5');
 const isRenderer = require('is-electron-renderer');
 const dotDrop = require('dot-prop');
