@@ -21,6 +21,8 @@
         "comma-dangle": ["error", "never"],
         "no-unused-expressions": 0,
         "import/no-unresolved": 0,
-        "chai-friendly/no-unused-expressions": 2
+        "chai-friendly/no-unused-expressions": 2,
+        "arrow-body-style": 0,
+        "no-underscore-dangle":0
     }
 }
