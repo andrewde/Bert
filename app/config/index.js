@@ -37,13 +37,16 @@ function loadConfig() {
     logger.log(`loading config file ${userConfigFile}`);
     const exist = fs.existsSync(userConfigFile);
     if (!exist) {
+        logger.log('fresh install');
         writeDefaultConfig();
         isFreshInstalled = true;
     } else {
+        logger.log('user config file exists, loading it');
         const userConfigStr = fs.readFileSync(userConfigFile, 'utf8');
         if (userConfigStr.trim().startsWith('module.exports')) {
             writeDefaultConfig();
         } else {
+            logger.log('merging default config and user config');
             rawConfig = merge({}, defaultConfig, JSON5.parse(userConfigStr));
         }
     }

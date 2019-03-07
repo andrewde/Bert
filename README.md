@@ -41,15 +41,6 @@ If you really like my work here, please support me a cup of coffee, thanks! :smi
   * .NET Framework 2.0 for reading file icon. Usually this is already installed in most PCs, but in some old system like windowsXP it may not being installed, you can download it on [Microsoft's website](https://www.microsoft
   * .com/zh-cn/download/confirmation.aspx?id=1639).
 
-## Config
-
-> Custom config directory: `~/.ELaunch/`
-> Custom config path: `~/.ELaunch/config.js`
-
-Plugins in default config are built-in plugins, you can overwrite them or add new plugin in custom config(`~/.ELaunch/config.js`). After the program started, it would automatically merge custom config.js to config.default.js. If you want to use platform-specific config, you can add `linux/darwin/win32` fields in plugin config and them would be merged into plugin config according to `process.platform`. This works in command config too. See [default config](app/config/config.default.js).
-
-Notice: after you edit your config, you need to reload config(on tray menu) or restart the app to make config changes work.
-
 ## Usage
 
 >Default Shotcut: Super+Space for linux and windows, Cmd+Space for MacOS
