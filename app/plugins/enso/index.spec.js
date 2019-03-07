@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { setConfig, exec } from './index';
 import os from 'os';
+import { dataPath } from '../../constants';
 
 // TODO use import as below instead of require
 // import * as fs from 'fs-extra'
@@ -32,7 +33,7 @@ describe('enso plugin', () => {
 
     describe('learn command', () => {
         it('should learn command and create file appropriately', () => {
-            const expectedFilePath = `${os.homedir()}/.berth/Enso/test.url`;
+            const expectedFilePath = `${dataPath}/Enso/test.url`;
 
             const args = ['test', 'as', 'http://example.com'];
             const event = {

@@ -1,7 +1,7 @@
 import stringMatcher from './utils/stringMatcher';
 import electron from 'electron';
 import logger from '../../utils/logger';
-const { dataPath } = require('../../constants');
+import { dataPath } from '../../constants';
 
 const shell = electron.shell;
 let pluginConfig;
