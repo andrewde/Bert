@@ -20,6 +20,9 @@ describe('enso plugin', () => {
                     template: 'Test content here: {{content}}',
                     placeholder: '{{content}}',
                     extension: '.url'
+                },
+                options: {
+                    filesToExclude: ["a_file_to_exclude"]
                 }
             }
         };

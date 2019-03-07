@@ -5,6 +5,7 @@ import { dataPath } from '../../constants';
 
 const shell = electron.shell;
 let pluginConfig;
+let pluginPlatformConfig;
 const fs = require('fs-extra');
 // On purpose not using constant file to keep this plugin standalone.
 const basePath = `${dataPath}/Enso`;
@@ -23,9 +24,7 @@ function handleLearnCommand(args, event) {
         return;
     }
 
-    const platform = process.platform;
-    logger.log(`platform is ${platform}`);
-    const shortcutFile = pluginConfig[platform].shortcutFile;
+    const shortcutFile = pluginPlatformConfig.shortcutFile;
     const filepath = `${basePath}/${name}${shortcutFile.extension}`;
 
     logger.log(`Writing file ${filepath}`);
@@ -74,7 +73,13 @@ function loadFilesFromDirectory(cmdInfo, dir){
         const filePath = dir[i];
         const fileExtension = path.extname(filePath);
         const filename = path.basename(filePath, fileExtension);
-        const isAMatch = stringMatcher.patternsMatchText(filePath, cmdInfo.args);
+        const shouldBeExcluded = pluginPlatformConfig.options.filesToExclude.indexOf(filename) != -1;
+        const isAMatch = !shouldBeExcluded || stringMatcher.patternsMatchText(filePath, cmdInfo.args);
+
+        if (shouldBeExcluded){
+            logger.log(`file '${filename}' has been excluded from results`);
+            continue;
+        }
         // TODO in plugin config, add a list of files or extneions to be ignored.
         // e.g: .DS_STORE for mac os.
         if (isAMatch) {
@@ -107,6 +112,7 @@ function handleCommand(args, event, cmdInfo) {
 
 export const setConfig = (pConfig) => {
     pluginConfig = pConfig;
+    pluginPlatformConfig = pluginConfig[process.platform];
     logger.log('plugin config set to ', pluginConfig);
 };
 

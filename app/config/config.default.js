@@ -159,6 +159,10 @@ module.exports = {
                         + '\n',
                         // The placeholder to replace by the actual file content.
                         placeholder: '{{url}}'
+                    },
+                    options: {
+                        // Do not show files matching the names below (case sensitive).
+                        filesToExclude: [".DS_Store"]
                     }
                 },
                 linux: {
@@ -168,7 +172,10 @@ module.exports = {
                     + '\n'
                     + 'URL={{url}}'
                     + '\n',
-                    placeholder: '{{url}}'
+                    placeholder: '{{url}}',
+                    options: {
+                        filesToExclude: []
+                    }
                 },
                 win32: {
                     shortcutFile: {
@@ -179,6 +186,9 @@ module.exports = {
                         + 'URL={{url}}'
                         + '\n',
                         placeholder: '{{url}}'
+                    },
+                    options: {
+                        filesToExclude: []
                     }
                 }
             },
