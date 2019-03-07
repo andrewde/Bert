@@ -1,15 +1,13 @@
 import stringMatcher from './utils/stringMatcher';
 import electron from 'electron';
 import logger from '../../utils/logger';
-import { dataPath } from '../../constants';
+import * as fs from 'fs-extra';
+const path = require('path');
 
-const shell = electron.shell;
 let pluginConfig;
 let pluginPlatformConfig;
-const fs = require('fs-extra');
-// On purpose not using constant file to keep this plugin standalone.
-const basePath = `${dataPath}/Enso`;
-const path = require('path');
+let basePath;
+const shell = electron.shell;
 
 function handleLearnCommand(args, event) {
     const name = args[0];
@@ -46,37 +44,18 @@ function handleLearnCommand(args, event) {
     }]);
 }
 
-function handleOpenCommand(args, event, cmdInfo) {
-    const dir = fs.readdirSync(basePath);
-
-    logger.log(`loading files from ${basePath}`);
-
-    if (!cmdInfo.args) {
-        // TODO return a proper message? like no results?
-        logger.log('empty args, returning');
-        return;
-    }
-
-    if (!dir) {
-        // TODO create diretcory
-        // TODO then return a proper message? like no results?
-        logger.log(`directory ${basePath} does not exist, returning`);
-        return;
-    }
-    let results = loadFilesFromDirectory(cmdInfo, dir);
-    event.sender.send('exec-reply', results);
-}
-
-function loadFilesFromDirectory(cmdInfo, dir){
+function loadFilesFromDirectory(cmdInfo, dir) {
     const results = [];
     for (let i = 0, l = dir.length; i < l; i++) {
         const filePath = dir[i];
         const fileExtension = path.extname(filePath);
         const filename = path.basename(filePath, fileExtension);
-        const shouldBeExcluded = pluginPlatformConfig.options.filesToExclude.indexOf(filename) != -1;
-        const isAMatch = !!shouldBeExcluded || stringMatcher.patternsMatchText(filePath, cmdInfo.args);
+        const filesToExclude = pluginPlatformConfig.options.filesToExclude;
+        const shouldBeExcluded = filesToExclude.indexOf(filename) !== -1;
+        const isAMatch = !!shouldBeExcluded
+                            || stringMatcher.patternsMatchText(filePath, cmdInfo.args);
 
-        if (shouldBeExcluded){
+        if (shouldBeExcluded) {
             logger.log(`file '${filename}' has been excluded from results`);
             continue;
         }
@@ -97,6 +76,27 @@ function loadFilesFromDirectory(cmdInfo, dir){
     return results;
 }
 
+function handleOpenCommand(args, event, cmdInfo) {
+    const dir = fs.readdirSync(basePath);
+
+    logger.log(`loading files from ${basePath}`);
+
+    if (!cmdInfo.args) {
+        // TODO return a proper message? like no results?
+        logger.log('empty args, returning');
+        return;
+    }
+
+    if (!dir) {
+        // TODO create diretcory
+        // TODO then return a proper message? like no results?
+        logger.log(`directory ${basePath} does not exist, returning`);
+        return;
+    }
+    const results = loadFilesFromDirectory(cmdInfo, dir);
+    event.sender.send('exec-reply', results);
+}
+
 function handleCommand(args, event, cmdInfo) {
     switch (cmdInfo.key) {
     case 'learn':
@@ -106,13 +106,14 @@ function handleCommand(args, event, cmdInfo) {
         handleOpenCommand(args, event, cmdInfo);
         break;
     default:
-         logger.error(`command '${cmdInfo.key}' was received but cannot be handled`);
+        logger.error(`command '${cmdInfo.key}' was received but cannot be handled`);
     }
 }
 
 export const setConfig = (pConfig) => {
     pluginConfig = pConfig;
     pluginPlatformConfig = pluginConfig[process.platform];
+    basePath = pluginPlatformConfig.options.basepath;
     logger.log('plugin config set to ', pluginConfig);
 };
 

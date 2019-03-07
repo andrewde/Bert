@@ -1,4 +1,5 @@
 import os from 'os';
+import { dataPath } from '../constants';
 const home = os.homedir();
 
 module.exports = {
@@ -161,6 +162,8 @@ module.exports = {
                         placeholder: '{{url}}'
                     },
                     options: {
+                        // Path where enso will save the files
+                        basepath: `${dataPath}/Enso`,
                         // Do not show files matching the names below (case sensitive).
                         filesToExclude: ['.DS_Store']
                     }
@@ -174,6 +177,7 @@ module.exports = {
                     + '\n',
                     placeholder: '{{url}}',
                     options: {
+                        basepath: `${dataPath}/Enso`,
                         filesToExclude: []
                     }
                 },
@@ -188,6 +192,7 @@ module.exports = {
                         placeholder: '{{url}}'
                     },
                     options: {
+                        basepath: `${dataPath}/Enso`,
                         filesToExclude: []
                     }
                 }

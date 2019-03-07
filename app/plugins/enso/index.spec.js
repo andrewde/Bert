@@ -1,16 +1,19 @@
 import { expect } from 'chai';
 import { setConfig, exec } from './index';
-import { dataPath } from '../../constants';
+import { appName } from '../../constants';
 import * as sinon from 'sinon';
 import * as fs from 'fs-extra';
+import os from 'os';
 
 // TODO move to __test__ directory
 describe('enso plugin', () => {
     let sandbox;
+    let basePath;
 
     beforeEach(() => {
         sandbox = sinon.sandbox.create();
-        const pluginConfig = {
+        basePath = `${os.tmpdir()}/${appName}/tests`;
+        const mockPluginConfig = {
             // The platform has been mocked to 'testPlatform' in 'context-setup.js'
             testPlatform: {
                 shortcutFile: {
@@ -19,11 +22,13 @@ describe('enso plugin', () => {
                     extension: '.url'
                 },
                 options: {
-                    filesToExclude: ["a_file_to_exclude"]
+                    // Purposely use the tmp directory as opposed to use the user directory.
+                    basepath: basePath,
+                    filesToExclude: ['a_file_to_exclude']
                 }
             }
         };
-        setConfig(pluginConfig);
+        setConfig(mockPluginConfig);
     });
 
     afterEach(() => {
@@ -32,7 +37,7 @@ describe('enso plugin', () => {
 
     describe('learn command', () => {
         it('should learn command and create file appropriately', () => {
-            const expectedFilePath = `${dataPath}/Enso/test.url`;
+            const expectedFilePath = `${basePath}/test.url`;
 
             const args = ['test', 'as', 'http://example.com'];
             const event = {
