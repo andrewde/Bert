@@ -1,4 +1,4 @@
-const os = require('os')
+import os from 'os';
 const appName = 'bert'
 const debug = process.argv.some(value => value.includes('--debug'))
 const dataPath = `${os.homedir()}/.${appName}`

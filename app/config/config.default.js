@@ -1,4 +1,4 @@
-const os = require('os');
+import os from 'os';
 const home = os.homedir();
 
 module.exports = {
