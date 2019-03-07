@@ -74,7 +74,7 @@ function loadFilesFromDirectory(cmdInfo, dir){
         const fileExtension = path.extname(filePath);
         const filename = path.basename(filePath, fileExtension);
         const shouldBeExcluded = pluginPlatformConfig.options.filesToExclude.indexOf(filename) != -1;
-        const isAMatch = !shouldBeExcluded || stringMatcher.patternsMatchText(filePath, cmdInfo.args);
+        const isAMatch = !!shouldBeExcluded || stringMatcher.patternsMatchText(filePath, cmdInfo.args);
 
         if (shouldBeExcluded){
             logger.log(`file '${filename}' has been excluded from results`);
