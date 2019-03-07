@@ -1,7 +1,7 @@
 import stringMatcher from './utils/stringMatcher';
 import electron from 'electron';
 import os from 'os';
-import logger from '../utils/logger';
+import logger from '../../utils/logger';
 
 const shell = electron.shell;
 let pluginConfig;
