@@ -1,16 +1,15 @@
-const electron = require('electron');
 const i18n = require('../i18n');
 const dotDrop = require('dot-prop');
 const { fallbackLng } = require('../constants');
-const promisify = require('../utils/promisify');
 const winMgr = require('../main/winMgr');
 const autoLaunch = require('../main/autoLaunch');
+import logger from '../../utils/logger';
 
 let config;
 let rawConfig;
 
 function setLanguage(ln, update = false) {
-    console.log('set language', ln);
+    logger.log('set language', ln);
     if (ln === i18n.language) return;
     i18n.changeLanguage(ln, err => {
         if (err && ln.includes('-')) {
@@ -27,7 +26,6 @@ function setLanguage(ln, update = false) {
 }
 
 function syncOnSet(key, value) {
-    const oldRawConfig = config.merge({}, rawConfig);
     dotDrop.set(rawConfig, key, value);
     switch (key) {
     case 'language':

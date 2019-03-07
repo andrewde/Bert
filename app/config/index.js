@@ -1,8 +1,6 @@
-const os = require('os');
 const fs = require('fs-extra');
 const JSON5 = require('json5');
 const isRenderer = require('is-electron-renderer');
-const electron = require('electron');
 const dotDrop = require('dot-prop');
 const { merge } = require('../utils/merge');
 const ElectronBus = require('../utils/ElectronBus');
@@ -11,6 +9,7 @@ const defaultConfig = require('./config.default.js');
 const configWatcher = require('./configWatcher');
 const i18n = require('../i18n');
 const { debug, dataPath, userConfigFile } = require('../constants');
+import logger from '../../utils/logger';
 
 let config = new ElectronBus('config');
 
@@ -30,12 +29,12 @@ function writeDefaultConfig() {
         rawConfig = merge({}, defaultConfig);
         writeConfig();
     } catch (err) {
-        console.error(err);
+        logger.error(err);
     }
 }
 
 function loadConfig() {
-    console.log(`loading config file ${userConfigFile}`);
+    logger.log(`loading config file ${userConfigFile}`);
     const exist = fs.existsSync(userConfigFile);
     if (!exist) {
         writeDefaultConfig();
@@ -83,7 +82,7 @@ Object.assign(config, {
             return true;
         } catch (e) {
             dotDrop.set(rawConfig, key, originalVal);
-            console.error(e);
+            logger.error(e);
             return false;
         }
     },
