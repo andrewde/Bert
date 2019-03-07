@@ -1,1 +1,1 @@
-module.exports = require(`./${require('os').platform()}`)
+module.exports = require(`./${require('os').platform()}`);
