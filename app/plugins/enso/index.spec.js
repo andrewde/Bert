@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import { setConfig, exec } from './index';
-import os from 'os';
 import { dataPath } from '../../constants';
 
 // TODO use import as below instead of require
