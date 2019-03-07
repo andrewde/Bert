@@ -1,6 +1,6 @@
 const http = require('http');
 const electron = require('electron');
-const fs = require('fs-extra');
+import * as fs from 'fs-extra';
 const querystring = require('querystring');
 
 const errorMsg = {

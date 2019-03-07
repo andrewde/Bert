@@ -1,5 +1,5 @@
 const path = require('path');
-const fs = require('fs-extra');
+import * as fs from 'fs-extra';
 const child = require('child_process');
 const config = require('../../../config');
 const os = require('os');
