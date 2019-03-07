@@ -6,6 +6,7 @@
 
 const EventEmitter = require('events');
 const electron = require('electron');
+import logger from '../utils/logger';
 
 function sendToAllWindows(...args) {
     electron.BrowserWindow.getAllWindows()
@@ -23,7 +24,6 @@ module.exports = class ElectronBus extends EventEmitter {
         const ipcMain = electron.ipcMain;
         if (ipcMain) {
             ipcMain.on(this._ipcChannel, (e, eventJson) => {
-                const eventData = JSON.parse(eventJson);
                 sendToAllWindows(this._ipcChannel, eventJson);
             });
         }
@@ -35,8 +35,8 @@ module.exports = class ElectronBus extends EventEmitter {
             listeners.forEach(listener => {
                 try {
                     listener(...eventData.args);
-                } catch (e) {
-                    console.error(e);
+                } catch (error) {
+                    logger.error(error);
                 }
             });
         });
@@ -49,7 +49,6 @@ module.exports = class ElectronBus extends EventEmitter {
     }
 
     emit(event, ...args) {
-        const remote = electron.remote;
         const ipcRenderer = electron.ipcRenderer;
         const ipcArgs = [this._ipcChannel, JSON.stringify({
             event, args: Array.from(args)
@@ -66,7 +65,7 @@ module.exports = class ElectronBus extends EventEmitter {
     removeListener(event, listener) {
         super.removeListener(event, listener);
         if (this._listenersMap[event]) {
-            this._listenersMap[event] = this._listenersMap[event].filter(l => l !== listender);
+            this._listenersMap[event] = this._listenersMap[event].filter(l => l !== listener);
         }
     }
 };

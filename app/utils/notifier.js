@@ -1,6 +1,6 @@
-const electron = require('electron');
 const isRenderer = require('is-electron-renderer');
 const ElectronBus = require('./ElectronBus');
+import logger from '../utils/logger';
 
 const notifierBus = new ElectronBus('notifier');
 
@@ -11,8 +11,8 @@ function notify(title, options) {
 
 module.exports = {
     initInRenderer() {
-        notifierBus.on('notify', function (title, options) {
-            console.log('notify', title, options);
+        notifierBus.on('notify', (title, options) => {
+            logger.log('notify', title, options);
             notify.call(this, title, options);
         });
         return this;
