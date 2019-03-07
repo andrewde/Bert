@@ -41,7 +41,8 @@
     "minor-release": "node scripts/release.js minor",
     "major-release": "node scripts/release.js major",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "open-logs": "open ~/Library/Logs/Berth"
   },
   "devDependencies": {
     "autobind-decorator": "^1.3.4",
