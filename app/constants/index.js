@@ -1,6 +1,9 @@
 import os from 'os';
 import logger from '../utils/logger';
+
 const debug = process.argv.some(value => value.includes('--debug'))
+const appName = 'bert'
+// The os.homedir() method returns the home directory of the current user as a string.
 const dataPath = `${os.homedir()}/.${appName}`
 const userConfigFile = `${dataPath}/config.json5`
 
