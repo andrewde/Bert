@@ -47,4 +47,4 @@ package-lock.json
 yarn.lock
 .vscode
 # Exclude diretcory where installers are built into.
-./out
+out
