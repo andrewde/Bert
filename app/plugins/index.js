@@ -1,6 +1,10 @@
 const path = require('path');
 const config = require('../config');
 import logger from '../utils/logger';
+import * as enso from '../plugins/enso/index';
+import * as app from '../plugins/app/index';
+// Once a plugin is initialized, set its key to true.
+let pluginInitializationStatus = {};
 
 // TODO what are these commented lines?
 // let lastUpdateTime = 0
@@ -9,31 +13,45 @@ import logger from '../utils/logger';
 // let isExecing = false
 let pluginMap;
 
-// TODO what is that comment?
-/*
-node command: ELECTRON_RUN_AS_NODE=true `${process.execPath}`
- */
-
 /**
- * Get plugin from Node's "require.cache" or load it up via "require" and initialize it.
- * https://nodejs.org/api/modules.html#modules_require_cache
+ * Get plugin reference and initialize it if first load.
  */
 function getPlugin(pluginInfo) {
+    let plugin;
+    let shouldPluginBeInitialized;
+
     logger.log(`getPlugin for plugin name ${pluginInfo.name}`);
 
-    const pluginFile = path.normalize(pluginInfo.path);
-    // Check if the plugin has been previously imported or not.
-    // Once you call require(<module path>), the module is saved in require.cache.
-    // Key = path, value = metadata about the module.
-    const pluginIsRequiredBefore = !!require.cache[pluginFile];
-    // Safe to call require multiple times for the same module/path.
-    // Subsequent calls to require for the same module/path
-    // will load the same object that was loaded by the first require.
-    const plugin = require(pluginFile);
+    switch (pluginInfo.name) {
+        case 'e':
+            // TODO rename e to enso
+            plugin = enso;
+            break;
+        case 'app':
+            plugin = app;
+            break;
+        default:
+            logger.error(`plugin '${pluginInfo.name}' hasn't been imported via 'import *', falling back to dynamic rquire.`);
+            const pluginFile = path.normalize(pluginInfo.path);
+            // Check if the plugin has been previously imported or not.
+            // Once you call require(<module path>), the module is saved in require.cache.
+            // Key = path, value = metadata about the module.
+            shouldPluginBeInitialized = require.cache[pluginFile];
+            // Safe to call require multiple times for the same module/path.
+            // Subsequent calls to require for the same module/path
+            // will load the same object that was loaded by the first require.
+            // The require below will most likely fail b/c of: https://github.com/electron-userland/electron-forge/issues/183
+            plugin = require(pluginFile);
+    }
 
-    logger.log(`pluginIsRequiredBefore ${pluginIsRequiredBefore}`);
+    shouldPluginBeInitialized = !pluginInitializationStatus[pluginInfo.name];
 
-    if (!pluginIsRequiredBefore) {
+    if (!plugin) {
+        logger.error(`plugin '${pluginInfo.name}' import failed. Plugin reference is null.`);
+        return;
+    }
+
+    if (shouldPluginBeInitialized) {
         try {
             logger.log(`Plugin '${pluginInfo.name}'
                         of path '${pluginInfo.path}' needs to be initialized.`);
@@ -46,8 +64,12 @@ function getPlugin(pluginInfo) {
             if (plugin.setConfig) {
                 plugin.setConfig(pluginInfo.config, config, config.context);
             }
+
+            // mark the plugin as initialized
+            pluginInitializationStatus[pluginInfo.name] = true;
+
         } catch (e) {
-            logger.error('Plugin [%s] setConfig failed!!', pluginInfo.name, e);
+            logger.error(`Plugin '${pluginInfo.name}' setConfig failed!`, e);
         }
     }
     return plugin;
@@ -73,7 +95,7 @@ function loadPluginMap() {
     logger.log('loading plugin map');
     pluginMap = {};
     Object.keys(config.plugins).forEach(pluginName => {
-        logger.log(`loading plugin ${pluginName} and creating pluginInfo from its definition`);
+        logger.log(`loading plugin ${pluginName}`);
         const pluginInfo = config.plugins[pluginName];
         pluginInfo.name = pluginName;
         const cmdConfigMap = pluginInfo.commands || { [pluginName]: {} };
@@ -91,7 +113,7 @@ function loadPluginMap() {
                     plugin.initOnStart(pluginInfo.config, config);
                 }
             } catch (e) {
-                logger.error('Plugin [%s] initOnStart failed!', pluginName, e);
+                logger.error(`Plugin '${pluginName}' initOnStart failed!`, pluginName, e);
             }
         }
     });
@@ -136,10 +158,10 @@ module.exports = {
         const cmdInfo = parseCmd(data);
         const plugin = getPlugin(cmdInfo.plugin);
         try {
-            logger.log('calling plugin');
+            logger.log(`calling ${cmdInfo.plugin.name}.exec`);
             plugin.exec(cmdInfo.args, event, cmdInfo);
         } catch (e) {
-            logger.error('Plugin [%s] exec failed!', cmdInfo.plugin.name, e);
+            logger.log(`${cmdInfo.plugin.name}.exec failed`, e);
         }
         // child.exec(`${cmdInfo.path} ${cmdInfo.args.join(' ')}`, (error, stdout, stderr)=>{
         //   if(error) logger.error(error);
@@ -152,7 +174,7 @@ module.exports = {
         try {
             plugin.execItem(data.item, event, cmdInfo);
         } catch (e) {
-            logger.error('Plugin [%s] execItem failed!', cmdInfo.plugin.name, e);
+            logger.error(`'Plugin '${cmdInfo.plugin.name}' exec failed`, e);
         }
     }
 };
