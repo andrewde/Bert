@@ -1,11 +1,8 @@
 import { expect } from 'chai';
 import { setConfig, exec } from './index';
 import { dataPath } from '../../constants';
-
-// TODO use import as below instead of require
-// import * as fs from 'fs-extra'
-const fs = require('fs-extra');
 import * as sinon from 'sinon';
+import * as fs from 'fs-extra';
 
 // TODO move to __test__ directory
 describe('enso plugin', () => {
