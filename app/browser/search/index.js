@@ -100,7 +100,7 @@ function bindIpcEvents() {
         resizeWindow();
     });
 
-    ipcRenderer.on('exec-item-reply', (event, arg) => {
+    ipcRenderer.on('exec-item-reply', () => {
         $('#search-input').value = '';
         $('#items').innerHTML = '';
         resizeWindow();
