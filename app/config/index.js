@@ -9,7 +9,7 @@ const defaultConfig = require('./config.default.js');
 const configWatcher = require('./configWatcher');
 const i18n = require('../i18n');
 const { debug, dataPath, userConfigFile } = require('../constants');
-import logger from '../../utils/logger';
+import logger from '../utils/logger';
 
 let config = new ElectronBus('config');
 

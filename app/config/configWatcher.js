@@ -3,7 +3,7 @@ const dotDrop = require('dot-prop');
 const { fallbackLng } = require('../constants');
 const winMgr = require('../main/winMgr');
 const autoLaunch = require('../main/autoLaunch');
-import logger from '../../utils/logger';
+import logger from '../utils/logger';
 
 let config;
 let rawConfig;
