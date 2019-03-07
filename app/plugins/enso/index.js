@@ -76,24 +76,25 @@ function loadFilesFromDirectory(cmdInfo, dir) {
     return results;
 }
 
-function handleOpenCommand(args, event, cmdInfo) {
+function getOrCreateWorkingDirectory() {
+    logger.log(`getOrCreateWorkingDirectory from ${basePath}`);
+    if (!fs.existsSync(basePath)) {
+        logger.log(`directory ${basePath} does not exist, creating it`);
+        // create the full directory path if it doesn't exist (like mkdir -p)
+        fs.ensureDirSync(basePath);
+    }
     const dir = fs.readdirSync(basePath);
+    return dir;
+}
 
-    logger.log(`loading files from ${basePath}`);
-
+function handleOpenCommand(args, event, cmdInfo) {
     if (!cmdInfo.args) {
         // TODO return a proper message? like no results?
         logger.log('empty args, returning');
         return;
     }
 
-    if (!dir) {
-        // TODO create diretcory
-        // TODO then return a proper message? like no results?
-        logger.log(`directory ${basePath} does not exist, returning`);
-        return;
-    }
-    const results = loadFilesFromDirectory(cmdInfo, dir);
+    const results = loadFilesFromDirectory(cmdInfo, getOrCreateWorkingDirectory());
     event.sender.send('exec-reply', results);
 }
 
@@ -115,6 +116,7 @@ export const setConfig = (pConfig) => {
     pluginPlatformConfig = pluginConfig[process.platform];
     basePath = pluginPlatformConfig.options.basepath;
     logger.log('plugin config set to ', pluginConfig);
+    getOrCreateWorkingDirectory();
 };
 
 export const exec = (args, event, cmdInfo) => {
