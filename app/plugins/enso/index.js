@@ -100,16 +100,18 @@ function handleOpenCommand(args, event, cmdInfo) {
 
 function handleCommand(args, event, cmdInfo) {
     switch (cmdInfo.key) {
-    case 'learn':
-        handleLearnCommand(args, event);
-        break;
-    case 'open':
-        handleOpenCommand(args, event, cmdInfo);
-        break;
-    default:
-        logger.error(`command '${cmdInfo.key}' was received but cannot be handled`);
+        case 'learn':
+            handleLearnCommand(args, event);
+            break;
+        case 'open':
+            handleOpenCommand(args, event, cmdInfo);
+            break;
+        default:
+            logger.error(`command '${cmdInfo.key}' was received but cannot be handled`);
     }
 }
+
+// TODO consolidate export like done in logger
 
 export const setConfig = (pConfig) => {
     pluginConfig = pConfig;
