@@ -1,7 +1,7 @@
 const os = require('os')
-
+const appName = 'bert'
 const debug = process.argv.some(value => value.includes('--debug'))
-const dataPath = `${os.homedir()}/.berth`
+const dataPath = `${os.homedir()}/.${appName}`
 const userConfigFile = `${dataPath}/config.json5`
 
 console.log(`debug is ${debug}`);
@@ -10,6 +10,7 @@ console.log(`userConfigFile is ${userConfigFile}`);
 
 module.exports = {
   debug,
+  appName,
   dataPath,
   userConfigFile,
   languages: [{

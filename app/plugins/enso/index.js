@@ -1,13 +1,13 @@
 import stringMatcher from './utils/stringMatcher';
 import electron from 'electron';
-import os from 'os';
 import logger from '../../utils/logger';
+const { dataPath } = require('../../constants');
 
 const shell = electron.shell;
 let pluginConfig;
 const fs = require('fs-extra');
 // On purpose not using constant file to keep this plugin standalone.
-const dataPath = `${os.homedir()}/.berth/Enso`;
+const basePath = `${dataPath}/Enso`;
 const path = require('path');
 
 function handleLearnCommand(args, event) {
@@ -26,7 +26,7 @@ function handleLearnCommand(args, event) {
     const platform = process.platform;
     logger.log(`platform is ${platform}`);
     const shortcutFile = pluginConfig[platform].shortcutFile;
-    const filepath = `${dataPath}/${name}${shortcutFile.extension}`;
+    const filepath = `${basePath}/${name}${shortcutFile.extension}`;
 
     logger.log(`Writing file ${filepath}`);
 
@@ -48,9 +48,9 @@ function handleLearnCommand(args, event) {
 }
 
 function handleOpenCommand(args, event, cmdInfo) {
-    const dir = fs.readdirSync(dataPath);
+    const dir = fs.readdirSync(basePath);
 
-    logger.log(`loading files from ${dataPath}`);
+    logger.log(`loading files from ${basePath}`);
 
     if (!cmdInfo.args) {
         // TODO return a proper message? like no results?
@@ -61,7 +61,7 @@ function handleOpenCommand(args, event, cmdInfo) {
     if (!dir) {
         // TODO create diretcory
         // TODO then return a proper message? like no results?
-        logger.log(`directory ${dataPath} does not exist, returning`);
+        logger.log(`directory ${basePath} does not exist, returning`);
         return;
     }
 
@@ -80,7 +80,7 @@ function handleOpenCommand(args, event, cmdInfo) {
                 // TODO can we get the icon from the file itself?
                 // TODO if there is no icon provided, there is a cross displayed.
                 icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
-                value: `${dataPath}/${filePath}`
+                value: `${basePath}/${filePath}`
                 // detail: ''
             });
         }
