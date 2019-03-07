@@ -5,10 +5,10 @@ import log from 'electron-log';
  * https://www.npmjs.com/package/electron-log
 */
 export default {
-    log(text) {
-        log.debug(text);
+    log(text, ...params) {
+        log.debug(text, params);
     },
-    error(text) {
-        log.error(text);
+    error(text, ...params) {
+        log.error(text, params);
     }
 };
