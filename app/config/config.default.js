@@ -162,7 +162,7 @@ module.exports = {
                     },
                     options: {
                         // Do not show files matching the names below (case sensitive).
-                        filesToExclude: [".DS_Store"]
+                        filesToExclude: ['.DS_Store']
                     }
                 },
                 linux: {
