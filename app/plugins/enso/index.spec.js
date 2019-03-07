@@ -42,13 +42,9 @@ describe('enso plugin', () => {
             };
             const cmdInfo = {
                 key: 'learn',
-                // TODO these path can be removed right
-                path: '/workspaces/Berthe/app/plugins/enso/index.js',
                 args: ['ppppp', 'as', 'y'],
-                type: undefined,
                 plugin:
                 {
-                    path: '/workspaces/Berthe/app/config/../plugins/enso/index.js',
                     commands: { learn: {}, open: {} },
                     name: 'e',
                     config: {}
