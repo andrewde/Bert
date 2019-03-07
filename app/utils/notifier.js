@@ -17,11 +17,12 @@ module.exports = {
         });
         return this;
     },
-    notify(title, options) {
+    // TODO updated this part. Working?
+    notify(title, options, ...args) {
         if (isRenderer) { // in renderer process
             notify(title, options);
         } else {
-            notifierBus.emit('notify', ...arguments);
+            notifierBus.emit('notify', args);
         }
     }
 };
