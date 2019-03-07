@@ -1,4 +1,5 @@
 import * as fs from 'fs-extra';
+import logger from '../../../utils/logger';
 const shell = require('electron').shell;
 const globule = require('globule');
 const update = require('./update');
@@ -13,7 +14,6 @@ let watchers = [];
 let appDbFile;
 let appDb;
 
-
 function updateAppDb() {
     update(appDb, appDbFile, pluginConfig, globalConfig)
         .then(ret => { appDb = ret; });
@@ -23,7 +23,7 @@ function init() {
     // app/apps.db 用于缓存应用信息，当有新应用安装时才更新
     // {lastUpdateDate:0 ,apps:[]}
     appDbFile = `${globalConfig.dataPath}/app/app.db`;
-    console.log(`appDbFile is ${appDbFile}`);
+    logger.log(`appDbFile is ${appDbFile}`);
     fs.ensureFileSync(appDbFile);
     appDb = appDb
     || fs.readJsonSync(appDbFile, { throws: false, encoding: 'utf-8' })
@@ -55,7 +55,7 @@ module.exports = {
         init();
     },
     exec(args, event) {
-        console.log('Executing app plugin...');
+        logger.log('Executing app plugin...');
         if (args.join('').trim() === '') return; // 空格返回
         const patt = `*${args.join('*').toLowerCase()}*`;
         const apps = Object.keys(appDb.apps).map(k => appDb.apps[k]);
@@ -79,7 +79,7 @@ module.exports = {
             return false;
         }).slice(0, 20);
         // TODO items should be renamed to results
-        console.log(`Sending exec-reply event with ${items.length} results back`);
+       logger.log(`Sending exec-reply event with ${items.length} results back`);
         event.sender.send('exec-reply', items);
     },
     execItem(item, event) {
