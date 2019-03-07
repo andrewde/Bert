@@ -1,7 +1,4 @@
-const fs = require('fs');
 const path = require('path');
-import os from 'os';
-const child = require('child_process');
 const config = require('../config');
 import logger from '../utils/logger';
 
@@ -38,27 +35,33 @@ function getPlugin(pluginInfo) {
 
     if (!pluginIsRequiredBefore) {
         try {
-            logger.log(`Plugin '${pluginInfo.name}' of path '${pluginInfo.path}' needs to be initialized.`);
+            logger.log(`Plugin '${pluginInfo.name}'
+                        of path '${pluginInfo.path}' needs to be initialized.`);
             // init once
-            plugin.init && plugin.init(pluginInfo.config, config, config.context);
+            if (plugin.init) {
+                plugin.init(pluginInfo.config, config, config.context);
+            }
+
             // setConfig was declared
-            plugin.setConfig && plugin.setConfig(pluginInfo.config, config, config.context);
+            if (plugin.setConfig) {
+                plugin.setConfig(pluginInfo.config, config, config.context);
+            }
         } catch (e) {
-            console.error('Plugin [%s] setConfig failed!!', pluginInfo.name, e);
+            logger.error('Plugin [%s] setConfig failed!!', pluginInfo.name, e);
         }
     }
     return plugin;
 }
 
-function getMergedPluginInfo(pluginInfo, cmdConfig) {
-    cmdConfig = cmdConfig || {};
+function getMergedPluginInfo(pluginInf, cmdConf) {
+    const cmdConfig = cmdConf || {};
+    const pluginInfo = pluginInf;
     pluginInfo.config = pluginInfo.config || {};
     const platform = process.platform;
     const mergedCmdConfig = config.merge({},
         pluginInfo.config, pluginInfo.config[platform],
         cmdConfig, cmdConfig[platform]);
 
-    // logger.log(mergedCmdConfig);
     const mergedPluginInfo = config.merge({}, pluginInfo, {
         config: mergedCmdConfig
     });
@@ -84,9 +87,11 @@ function loadPluginMap() {
         if (pluginInfo.config && pluginInfo.config.init_on_start) {
             const plugin = getPlugin(pluginInfo);
             try {
-                plugin.initOnStart && plugin.initOnStart(pluginInfo.config, config);
+                if (plugin.initOnStart) {
+                    plugin.initOnStart(pluginInfo.config, config);
+                }
             } catch (e) {
-                console.error('Plugin [%s] initOnStart failed!', pluginName, e);
+                logger.error('Plugin [%s] initOnStart failed!', pluginName, e);
             }
         }
     });
@@ -134,10 +139,10 @@ module.exports = {
             logger.log('calling plugin');
             plugin.exec(cmdInfo.args, event, cmdInfo);
         } catch (e) {
-            console.error('Plugin [%s] exec failed!', cmdInfo.plugin.name, e);
+            logger.error('Plugin [%s] exec failed!', cmdInfo.plugin.name, e);
         }
         // child.exec(`${cmdInfo.path} ${cmdInfo.args.join(' ')}`, (error, stdout, stderr)=>{
-        //   if(error) console.error(error);
+        //   if(error) logger.error(error);
         //   cb(stdout)
         // })
     },
@@ -147,7 +152,7 @@ module.exports = {
         try {
             plugin.execItem(data.item, event, cmdInfo);
         } catch (e) {
-            console.error('Plugin [%s] execItem failed!', cmdInfo.plugin.name, e);
+            logger.error('Plugin [%s] execItem failed!', cmdInfo.plugin.name, e);
         }
     }
 };
