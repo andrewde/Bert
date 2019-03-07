@@ -64,9 +64,12 @@ function handleOpenCommand(args, event, cmdInfo) {
         logger.log(`directory ${basePath} does not exist, returning`);
         return;
     }
+    let results = loadFilesFromDirectory(cmdInfo, dir);
+    event.sender.send('exec-reply', results);
+}
 
+function loadFilesFromDirectory(cmdInfo, dir){
     const results = [];
-
     for (let i = 0, l = dir.length; i < l; i++) {
         const filePath = dir[i];
         const fileExtension = path.extname(filePath);
@@ -81,12 +84,12 @@ function handleOpenCommand(args, event, cmdInfo) {
                 // TODO if there is no icon provided, there is a cross displayed.
                 icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
                 value: `${basePath}/${filePath}`
+                // TODO what is detail for?
                 // detail: ''
             });
         }
     }
-
-    event.sender.send('exec-reply', results);
+    return results;
 }
 
 function handleCommand(args, event, cmdInfo) {
@@ -98,8 +101,7 @@ function handleCommand(args, event, cmdInfo) {
         handleOpenCommand(args, event, cmdInfo);
         break;
     default:
-          // code block
-          // TODO handle this
+         logger.error(`command '${cmdInfo.key}' was received but cannot be handled`);
     }
 }
 
