@@ -11,6 +11,8 @@ describe('enso plugin', () => {
 
     beforeEach(() => {
         basePath = `${os.tmpdir()}/${appName}/tests`;
+        // TODO drop diretcory to make sure to start clean?
+        // TODO generate a few test files, copy them from a test assets folder?
         const mockPluginConfig = {
             // The platform has been mocked to 'testPlatform' in 'context-setup.js'
             testPlatform: {
@@ -93,4 +95,7 @@ describe('enso plugin', () => {
             // });
         });
     });
+
+    // TODO add a test that make sure the diretcory is created if doesn't exist
+    // TODO running tests into a different directory each time should do it
 });
