@@ -7,11 +7,9 @@ import os from 'os';
 
 // TODO move to __test__ directory
 describe('enso plugin', () => {
-    let sandbox;
     let basePath;
 
     beforeEach(() => {
-        sandbox = sinon.sandbox.create();
         basePath = `${os.tmpdir()}/${appName}/tests`;
         const mockPluginConfig = {
             // The platform has been mocked to 'testPlatform' in 'context-setup.js'
@@ -32,7 +30,6 @@ describe('enso plugin', () => {
     });
 
     afterEach(() => {
-        sandbox.restore();
     });
 
     describe('learn command', () => {
