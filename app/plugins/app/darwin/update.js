@@ -1,6 +1,7 @@
 const myPromisify = require('../../../utils/promisify');
 const path = require('path');
 import os from 'os';
+import 'babel-polyfill';
 const child = myPromisify(require('child_process'));
 const exec = child.exec;
 const fs = myPromisify(require('fs-extra'));

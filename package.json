@@ -208,11 +208,12 @@
     }
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "electron-compile": "^6.4.4",
+    "electron-log": "^3.0.1",
     "electron-squirrel-startup": "^1.0.0",
     "i18next": "^11.3.5",
-    "is-electron-renderer": "^2.0.1",
-    "electron-log": "^3.0.1"
+    "is-electron-renderer": "^2.0.1"
   },
   "config": {
     "forge": {
