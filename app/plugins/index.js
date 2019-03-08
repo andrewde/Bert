@@ -4,7 +4,7 @@ import logger from '../utils/logger';
 import * as enso from '../plugins/enso/index';
 import * as app from '../plugins/app/index';
 // Once a plugin is initialized, set its key to true.
-let pluginInitializationStatus = {};
+const pluginInitializationStatus = {};
 
 // TODO what are these commented lines?
 // let lastUpdateTime = 0
@@ -19,6 +19,7 @@ let pluginMap;
 function getPlugin(pluginInfo) {
     let plugin;
     let shouldPluginBeInitialized;
+    let pluginFile;
 
     logger.log(`getPlugin for plugin name ${pluginInfo.name}`);
 
@@ -31,8 +32,9 @@ function getPlugin(pluginInfo) {
             plugin = app;
             break;
         default:
-            logger.error(`plugin '${pluginInfo.name}' hasn't been imported via 'import *', falling back to dynamic rquire.`);
-            const pluginFile = path.normalize(pluginInfo.path);
+            logger.error(`plugin '${pluginInfo.name}' hasn't been imported via 'import *',
+                            falling back to dynamic rquire.`);
+            pluginFile = path.normalize(pluginInfo.path);
             // Check if the plugin has been previously imported or not.
             // Once you call require(<module path>), the module is saved in require.cache.
             // Key = path, value = metadata about the module.
@@ -48,7 +50,7 @@ function getPlugin(pluginInfo) {
 
     if (!plugin) {
         logger.error(`plugin '${pluginInfo.name}' import failed. Plugin reference is null.`);
-        return;
+        return plugin;
     }
 
     if (shouldPluginBeInitialized) {
@@ -67,7 +69,6 @@ function getPlugin(pluginInfo) {
 
             // mark the plugin as initialized
             pluginInitializationStatus[pluginInfo.name] = true;
-
         } catch (e) {
             logger.error(`Plugin '${pluginInfo.name}' setConfig failed!`, e);
         }
