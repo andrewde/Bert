@@ -28,31 +28,31 @@ function setLanguage(ln, update = false) {
 function syncOnSet(key, value) {
     dotDrop.set(rawConfig, key, value);
     switch (key) {
-    case 'language':
-        setLanguage(value);
-        break;
-    case 'display':
-    case 'position':
-    case 'position.x':
-    case 'position.y':
-        if (!config.isRenderer) {
-            const mainWin = config.context.mainWindow;
-            winMgr.setPosition(mainWin, rawConfig.position);
-        }
-        break;
-    case 'width':
-    case 'maxHeight':
-        if (!config.isRenderer) {
-            const mainWin = config.context.mainWindow;
-            winMgr.setContentSize(mainWin, config.width, config.maxHeight);
-        }
-        break;
-    case 'autoLaunch':
-        if (!config.isRenderer) {
-            autoLaunch(value);
-        }
-        break;
-    default:
+        case 'language':
+            setLanguage(value);
+            break;
+        case 'display':
+        case 'position':
+        case 'position.x':
+        case 'position.y':
+            if (!config.isRenderer) {
+                const mainWin = config.context.mainWindow;
+                winMgr.setPosition(mainWin, rawConfig.position);
+            }
+            break;
+        case 'width':
+        case 'maxHeight':
+            if (!config.isRenderer) {
+                const mainWin = config.context.mainWindow;
+                winMgr.setContentSize(mainWin, config.width, config.maxHeight);
+            }
+            break;
+        case 'autoLaunch':
+            if (!config.isRenderer) {
+                autoLaunch(value);
+            }
+            break;
+        default:
     }
 }
 

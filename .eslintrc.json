@@ -17,7 +17,7 @@
         }
     },
     "rules": {
-        "indent": ["error", 4],
+        "indent": ["error", 4, {"SwitchCase": 1}],
         "comma-dangle": ["error", "never"],
         "no-unused-expressions": 0,
         "import/no-unresolved": 0,

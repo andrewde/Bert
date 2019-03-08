@@ -70,14 +70,14 @@ function bindDocKeyUp() {
             onExecItem($select, cmd);
         } else {
             switch (e.keyCode) {
-            case 13: // enter
-                onEnter($inp, cmd);
-                break;
-            case 8: // backspace
-                $('#search-input').focus();// auto jump to search input after pressed backspace
-                break;
-            default:
-                break;
+                case 13: // enter
+                    onEnter($inp, cmd);
+                    break;
+                case 8: // backspace
+                    $('#search-input').focus();// auto jump to search input after pressed backspace
+                    break;
+                default:
+                    break;
             }
         }
     });

@@ -100,15 +100,14 @@ function handleOpenCommand(args, event, cmdInfo) {
 
 function handleCommand(args, event, cmdInfo) {
     switch (cmdInfo.key) {
-    // TODO eslint wants to keep this werid identiation, fix it.
-    case 'learn':
-        handleLearnCommand(args, event);
-        break;
-    case 'open':
-        handleOpenCommand(args, event, cmdInfo);
-        break;
-    default:
-        logger.error(`command '${cmdInfo.key}' was received but cannot be handled`);
+        case 'learn':
+            handleLearnCommand(args, event);
+            break;
+        case 'open':
+            handleOpenCommand(args, event, cmdInfo);
+            break;
+        default:
+            logger.error(`command '${cmdInfo.key}' was received but cannot be handled`);
     }
 }
 

@@ -11,13 +11,13 @@ function selectBtn(n, $selItem = document) {
     }
     let $selBtn = n;
     switch (n) {
-    case -1:
-        $selBtn = $btns[(prevIndex - 1 + $btns.length) % $btns.length];
-        break;
-    case 1:
-        $selBtn = $btns[(prevIndex + 1) % $btns.length];
-        break;
-    default:
+        case -1:
+            $selBtn = $btns[(prevIndex - 1 + $btns.length) % $btns.length];
+            break;
+        case 1:
+            $selBtn = $btns[(prevIndex + 1) % $btns.length];
+            break;
+        default:
     }
     $selBtn.classList.add('select');
 }
