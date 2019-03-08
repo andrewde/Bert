@@ -1,5 +1,5 @@
 {
-  "name": "Berth",
+  "name": "Bert",
   "version": "0.0.1",
   "main": "./app/index.js",
   "repository": {
@@ -49,7 +49,7 @@
     "major-release": "node scripts/release.js major",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "open-logs": "open ~/Library/Logs/Berth",
+    "open-logs": "open ~/Library/Logs/Bert",
     "open-config": "open ~/.bert"
   },
   "devDependencies": {
@@ -232,7 +232,7 @@
         "packageManager": "yarn"
       },
       "electronWinstallerConfig": {
-        "name": "Berth"
+        "name": "Bert"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
@@ -242,7 +242,7 @@
       },
       "windowsStoreConfig": {
         "packageName": "",
-        "name": "Berth"
+        "name": "Bert"
       }
     }
   }
