@@ -17,6 +17,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 if (!fs.existsSync(localesPath)) {
+  // TODO the third argument is not supposed to be a callbacl but options... the copy will likely fail.
   fs.copySync(localesPathBuiltin, localesPath, e => console.error(e))
 }
 
