@@ -54,7 +54,6 @@ describe('enso plugin', () => {
         it('should learn command and create file appropriately', () => {
             // arrange
             const expectedFilePath = `${pluginBasePath}/test.url`;
-
             const args = ['test', 'as', 'http://example.com'];
             const event = {
                 sender: {
@@ -62,14 +61,7 @@ describe('enso plugin', () => {
                 }
             };
             const cmdInfo = {
-                key: 'learn',
-                plugin:
-                {
-                    commands: { learn: {}, open: {} },
-                    name: 'e',
-                    config: {}
-                },
-                config: {}
+                key: 'learn'
             };
 
             // act
