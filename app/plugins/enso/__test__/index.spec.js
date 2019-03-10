@@ -18,7 +18,6 @@ const assertOpenCommandResult = (result, expectedName, expectedIconName) => {
 /**
  * TODO add a test that make sure the diretcory is created if doesn't exist
  * TODO running tests into a different directory each time should do it
- * TODO for learn on top of checking if file exists, check the content against an expected file.
 */
 describe('enso plugin', () => {
     beforeEach(() => {
