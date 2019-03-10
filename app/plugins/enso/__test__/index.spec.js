@@ -80,7 +80,7 @@ describe('enso plugin', () => {
     });
 
     describe('open command', () => {
-        it('should open command', () => {
+        it('should return all the resutls matching the text input', () => {
             // arrange
             const args = ['test'];
             const event = {
@@ -91,7 +91,6 @@ describe('enso plugin', () => {
             const cmdInfo = {
                 key: 'open',
                 path: '',
-                args: ['test'],
                 plugin:
                 {
                     path: '',

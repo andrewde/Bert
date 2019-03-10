@@ -44,16 +44,16 @@ function handleLearnCommand(args, event) {
     }]);
 }
 
-function loadFilesFromDirectory(cmdInfo, dir) {
+function loadFilesMatchingKeywords(keywords, directory) {
     const results = [];
-    for (let i = 0, l = dir.length; i < l; i++) {
-        const filePath = dir[i];
+    for (let i = 0, l = directory.length; i < l; i++) {
+        const filePath = directory[i];
         const fileExtension = path.extname(filePath);
         const filename = path.basename(filePath, fileExtension);
         const filesToExclude = pluginPlatformConfig.options.filesToExclude;
         const shouldBeExcluded = filesToExclude.indexOf(filename) !== -1;
         const isAMatch = !!shouldBeExcluded
-                            || stringMatcher.patternsMatchText(filePath, cmdInfo.args);
+                            || stringMatcher.patternsMatchText(filePath, keywords);
 
         if (shouldBeExcluded) {
             logger.log(`file '${filename}' has been excluded from results`);
@@ -88,13 +88,12 @@ function getOrCreateWorkingDirectory() {
 }
 
 function handleOpenCommand(args, event, cmdInfo) {
-    if (!cmdInfo.args) {
+    if (!args) {
         // TODO return a proper message? like no results?
         logger.log('empty args, returning');
         return;
     }
-
-    const results = loadFilesFromDirectory(cmdInfo, getOrCreateWorkingDirectory());
+    const results = loadFilesMatchingKeywords(args, getOrCreateWorkingDirectory());
     event.sender.send('exec-reply', results);
 }
 
