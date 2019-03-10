@@ -51,7 +51,7 @@ module.exports = {
             path: `${__dirname}/../plugins/find/index.js`,
             config: {
                 // type: 'locate',
-                // db_path: require('os').homedir()+'/.ELaunch/find/locate.db',
+                // db_path: require('os').homedir()+'/.bert/find/locate.db',
                 // rootDir: '/home',
                 // exclude_patt: '\\/\\.|node_modules', //exclude hidden files
                 // use_regex: false,

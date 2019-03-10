@@ -4,7 +4,7 @@ import os from 'os';
 
 // init symlinks
 // TODO udate naee
-const localsDstPath = `${os.homedir()}/.ELaunch/locales`
+const localsDstPath = `${os.homedir()}/.bert/locales`
 const localesSrcPath = `${process.cwd()}/app/locales`
 if (!fs.existsSync(localsDstPath)) {
   fs.symlinkSync(localesSrcPath,

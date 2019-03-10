@@ -15,7 +15,7 @@ const errorMsg = {
 const delay = 300; let timer; let key = '917764008';
 
 function queryApi(query, cb) {
-    http.get(`http://fanyi.youdao.com/openapi.do?keyfrom=ELaunch&key=${key}&type=data&doctype=json&version=1.1&q=${query}`, (res) => {
+    http.get(`http://fanyi.youdao.com/openapi.do?keyfrom=TBD&key=${key}&type=data&doctype=json&version=1.1&q=${query}`, (res) => {
         let html = '';
         res.on('data', (data) => {
             html += data;

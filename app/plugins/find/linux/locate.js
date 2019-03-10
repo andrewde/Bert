@@ -7,8 +7,7 @@ const os = require('os');
 const pluginConfig = {
     limit: 20,
     locate_limit: 2000,
-    // TODO update here
-    db_path: '~/.ELaunch/find/mlocate.db'
+    db_path: '~/.bert/find/mlocate.db'
 };
 
 
