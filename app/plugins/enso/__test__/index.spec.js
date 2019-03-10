@@ -89,16 +89,7 @@ describe('enso plugin', () => {
                 }
             };
             const cmdInfo = {
-                key: 'open',
-                path: '',
-                plugin:
-                {
-                    path: '',
-                    commands: { learn: {}, open: {} },
-                    name: 'e',
-                    config: {}
-                },
-                config: {}
+                key: 'open'
             };
 
             // act
