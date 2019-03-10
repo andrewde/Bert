@@ -83,8 +83,8 @@ function getOrCreateWorkingDirectory() {
         // create the full directory path if it doesn't exist (like mkdir -p)
         fs.ensureDirSync(basePath);
     }
-    const dir = fs.readdirSync(basePath);
-    return dir;
+    const directory = fs.readdirSync(basePath);
+    return directory;
 }
 
 function handleOpenCommand(args, event) {
