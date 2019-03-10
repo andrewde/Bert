@@ -2,6 +2,7 @@ const myPromisify = require('../../../utils/promisify');
 const path = require('path');
 import os from 'os';
 import 'babel-polyfill';
+import logger from '../../../utils/logger';
 const child = myPromisify(require('child_process'));
 const exec = child.exec;
 const fs = myPromisify(require('fs-extra'));
@@ -59,7 +60,7 @@ function getAppInfo(file) {
                             fs.unlink(`${iconPath}/${name}`);
                         });
                     })
-                    .catch(e => console.error(icnsFile, e));
+                    .catch(e => logger.error(icnsFile, e));
             } catch (e) {
                 icon = defaultIcon;
             }
@@ -88,23 +89,30 @@ function update(appDb, appDbFile, pCfg, gCfg) {
     return Promise.all(pluginConfig.appPaths
         .map(_dir => {
             const dir = _dir.replace(/^~\//, `${os.homedir()}/`);
-            console.log(`Updating apps at dir '${dir}'`);
+            logger.log(`Updating apps at dir '${dir}'`);
             const findCmd =
         `mdfind -onlyin ${dir} 'kMDItemFSName=*.app' | grep -v '\.app\/'`;
             return exec(findCmd, { maxBuffer: 5 * 1024 * 1024 })
-                .then(out => out.toString().trim().split('\n'))
+                .then(out => {
+                    const result = out.toString().trim().split('\n');
+                    return result;
+                })
                 .then(files => Promise.all(files.map(file => co(function *() {
-                    if (!file) return;
+                    if (!file) {
+                        return;
+                    }
                     const mtime = fs.statSync(file).mtime.getTime();
                     const appName = path.basename(file, '.app');
-                    if (mtime > appDb.lastUpdateTime
-               || !appDb.apps[appName]) {
+                    if (mtime > appDb.lastUpdateTime || !appDb.apps[appName]) {
                         tmpApps[appName] = yield getAppInfo(file);
                         hasNewApp = true;
                     } else {
                         tmpApps[appName] = appDb.apps[appName];
                     }
-                }))));
+                }))))
+                .catch(error => {
+                    logger.error(error)
+                });
         }))
         .then(() => {
             appDb.lastUpdateTime = Date.now();
@@ -117,6 +125,8 @@ function update(appDb, appDbFile, pCfg, gCfg) {
                 notifier.notify('First Indexing Finished! Now Search Your Apps!');
             }
             return appDb;
-        }).catch(err => console.error(err));
+        }).catch(error => {
+            logger.error(error)
+    });
 }
 module.exports = update;

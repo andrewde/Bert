@@ -6,8 +6,6 @@ const update = require('./update');
 
 const defaultIcon = `${__dirname}/../assets/app.svg`;
 
-// app/apps.db 用于缓存应用信息，当有新应用安装时才更新
-// {lastUpdateDate:0 ,apps:[]}
 let pluginConfig;
 let globalConfig;
 let watchers = [];
@@ -20,8 +18,6 @@ function updateAppDb() {
 }
 
 function init() {
-    // app/apps.db 用于缓存应用信息，当有新应用安装时才更新
-    // {lastUpdateDate:0 ,apps:[]}
     appDbFile = `${globalConfig.dataPath}/app/app.db`;
     logger.log(`appDbFile is ${appDbFile}`);
     fs.ensureFileSync(appDbFile);
@@ -37,7 +33,9 @@ function init() {
         const watcher = fs.watch(dir, {
             recursive: true
         }, () => {
-            if (timer) clearTimeout(timer);
+            if (timer) {
+                clearTimeout(timer);
+            }
             timer = setTimeout(() => {
                 updateAppDb();
                 timer = null;
