@@ -87,10 +87,10 @@ function getOrCreateWorkingDirectory() {
     return dir;
 }
 
-function handleOpenCommand(args, event, cmdInfo) {
+function handleOpenCommand(args, event) {
     if (!args) {
         // TODO return a proper message? like no results?
-        logger.log('empty args, returning');
+        logger.log('empty args, skipping.');
         return;
     }
     const results = loadFilesMatchingKeywords(args, getOrCreateWorkingDirectory());
@@ -103,7 +103,7 @@ function handleCommand(args, event, cmdInfo) {
             handleLearnCommand(args, event);
             break;
         case 'open':
-            handleOpenCommand(args, event, cmdInfo);
+            handleOpenCommand(args, event);
             break;
         default:
             logger.error(`command '${cmdInfo.key}' was received but cannot be handled`);

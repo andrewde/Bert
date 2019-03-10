@@ -15,13 +15,12 @@ const assertOpenCommandResult = (result, expectedName, expectedIconName) => {
     expect(result.value).to.equal(`${pluginBasePath}/${expectedName}.url`);
 };
 
-// TODO add a test that make sure the diretcory is created if doesn't exist
-// TODO running tests into a different directory each time should do it
-// TODO drop diretcory to make sure to start clean? learn may create new stuff...
-// TODO for learn on top of checking if file exists, check the content against an expected file.
-
+/**
+ * TODO add a test that make sure the diretcory is created if doesn't exist
+ * TODO running tests into a different directory each time should do it
+ * TODO for learn on top of checking if file exists, check the content against an expected file.
+*/
 describe('enso plugin', () => {
-
     beforeEach(() => {
         const mockPluginConfig = {
             // The platform has been mocked to 'testPlatform' in 'context-setup.js'
@@ -43,15 +42,17 @@ describe('enso plugin', () => {
 
         // copy tests artifcats
         logger.log(`Copying test artifacts from '${testArtifacsPath}' to '${pluginBasePath}'`);
-        fs.ensureDirSync(pluginBasePath);
         fs.copySync(testArtifacsPath, pluginBasePath);
     });
 
     afterEach(() => {
+        // clean any files that may have been created to start next from a clean state
+        fs.emptyDirSync(pluginBasePath);
     });
 
     describe('learn command', () => {
         it('should learn command and create file appropriately', () => {
+            // arrange
             const expectedFilePath = `${pluginBasePath}/test.url`;
 
             const args = ['test', 'as', 'http://example.com'];
@@ -62,7 +63,6 @@ describe('enso plugin', () => {
             };
             const cmdInfo = {
                 key: 'learn',
-                args: ['ppppp', 'as', 'y'],
                 plugin:
                 {
                     commands: { learn: {}, open: {} },
@@ -71,11 +71,12 @@ describe('enso plugin', () => {
                 },
                 config: {}
             };
+
+            // act
             exec(args, event, cmdInfo);
+
+            // assert
             expect(fs.existsSync(expectedFilePath)).to.be.true;
-            fs.unlink(expectedFilePath, () => {
-                expect(fs.existsSync(expectedFilePath)).to.be.false;
-            });
         });
     });
 
