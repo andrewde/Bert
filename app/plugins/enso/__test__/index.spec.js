@@ -53,8 +53,7 @@ describe('enso plugin', () => {
     describe('learn command', () => {
         it('should learn command and create file appropriately', () => {
             // arrange
-            const expectedFilePath = `${pluginBasePath}/test.url`;
-            const args = ['test', 'as', 'http://example.com'];
+            const args = ['test', 'as', 'http://test.com'];
             const event = {
                 sender: {
                     send: sinon.stub()
@@ -68,7 +67,10 @@ describe('enso plugin', () => {
             exec(args, event, cmdInfo);
 
             // assert
+            const expectedFilePath = `${pluginBasePath}/test.url`;
             expect(fs.existsSync(expectedFilePath)).to.be.true;
+            const actualFileContent = fs.readFileSync(expectedFilePath, 'utf8');
+            expect(actualFileContent).to.equal('Test content here: http://test.com');
         });
     });
 
