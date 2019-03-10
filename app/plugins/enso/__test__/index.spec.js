@@ -1,18 +1,28 @@
 import { expect } from 'chai';
-import { setConfig, exec } from './index';
-import { appName } from '../../constants';
+import { setConfig, exec } from '../index';
+import { appName } from '../../../constants';
 import * as sinon from 'sinon';
 import * as fs from 'fs-extra';
 import os from 'os';
+import logger from '../../../utils/logger';
 
-// TODO move to __test__ directory
+const pluginBasePath = `${os.tmpdir()}/${appName}/tests`;
+const testArtifacsPath = `${__dirname}/artifacts/shortcuts`;
+
+const assertOpenCommandResult = (result, expectedName, expectedIconName) => {
+    expect(result.name).to.equal(expectedName);
+    expect(result.icon).to.contains(`/assets/${expectedIconName}`);
+    expect(result.value).to.equal(`${pluginBasePath}/${expectedName}.url`);
+};
+
+// TODO add a test that make sure the diretcory is created if doesn't exist
+// TODO running tests into a different directory each time should do it
+// TODO drop diretcory to make sure to start clean? learn may create new stuff...
+// TODO for learn on top of checking if file exists, check the content against an expected file.
+
 describe('enso plugin', () => {
-    let basePath;
 
     beforeEach(() => {
-        basePath = `${os.tmpdir()}/${appName}/tests`;
-        // TODO drop diretcory to make sure to start clean?
-        // TODO generate a few test files, copy them from a test assets folder?
         const mockPluginConfig = {
             // The platform has been mocked to 'testPlatform' in 'context-setup.js'
             testPlatform: {
@@ -23,12 +33,18 @@ describe('enso plugin', () => {
                 },
                 options: {
                     // Purposely use the tmp directory as opposed to use the user directory.
-                    basepath: basePath,
+                    basepath: pluginBasePath,
                     filesToExclude: ['a_file_to_exclude']
                 }
             }
         };
+
         setConfig(mockPluginConfig);
+
+        // copy tests artifcats
+        logger.log(`Copying test artifacts from '${testArtifacsPath}' to '${pluginBasePath}'`);
+        fs.ensureDirSync(pluginBasePath);
+        fs.copySync(testArtifacsPath, pluginBasePath);
     });
 
     afterEach(() => {
@@ -36,7 +52,7 @@ describe('enso plugin', () => {
 
     describe('learn command', () => {
         it('should learn command and create file appropriately', () => {
-            const expectedFilePath = `${basePath}/test.url`;
+            const expectedFilePath = `${pluginBasePath}/test.url`;
 
             const args = ['test', 'as', 'http://example.com'];
             const event = {
@@ -56,7 +72,6 @@ describe('enso plugin', () => {
                 config: {}
             };
             exec(args, event, cmdInfo);
-            // TODO on top of checking if file exists, check the content against an expected file.
             expect(fs.existsSync(expectedFilePath)).to.be.true;
             fs.unlink(expectedFilePath, () => {
                 expect(fs.existsSync(expectedFilePath)).to.be.false;
@@ -66,9 +81,8 @@ describe('enso plugin', () => {
 
     describe('open command', () => {
         it('should open command', () => {
-            // TODO mock files so that search can be conducted
-            // TODO should not be my user directory, use the OS thing
-            const args = ['testName', 'as', 'uuu'];
+            // arrange
+            const args = ['test'];
             const event = {
                 sender: {
                     send: sinon.stub()
@@ -77,8 +91,7 @@ describe('enso plugin', () => {
             const cmdInfo = {
                 key: 'open',
                 path: '',
-                args: ['banana'],
-                type: undefined,
+                args: ['test'],
                 plugin:
                 {
                     path: '',
@@ -88,14 +101,22 @@ describe('enso plugin', () => {
                 },
                 config: {}
             };
+
+            // act
             exec(args, event, cmdInfo);
-            // expect(fs.existsSync(expectedFilePath)).to.be.true;
-            // fs.unlink(expectedFilePath, () => {
-            //     expect(fs.existsSync(expectedFilePath)).to.be.false;
-            // });
+
+            // assert
+            sinon.assert.calledOnce(event.sender.send);
+
+            const actualArguments = event.sender.send.getCall(0).args;
+            const eventNameArgument = actualArguments[0];
+            const resultsArgument = actualArguments[1];
+
+            expect(eventNameArgument).to.equal('exec-reply');
+
+            assertOpenCommandResult(resultsArgument[0], 'test-1', 'search.svg');
+            assertOpenCommandResult(resultsArgument[1], 'test-2', 'search.svg');
+            assertOpenCommandResult(resultsArgument[2], 'test-3', 'search.svg');
         });
     });
-
-    // TODO add a test that make sure the diretcory is created if doesn't exist
-    // TODO running tests into a different directory each time should do it
 });
