@@ -50,7 +50,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "open-logs": "open ~/Library/Logs/Bert",
-    "open-config": "open ~/.bert"
+    "open-config": "open ~/.bert",
+    "open-out": "open ./out"
   },
   "devDependencies": {
     "autobind-decorator": "^1.3.4",
