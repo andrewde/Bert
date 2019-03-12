@@ -9,41 +9,6 @@ let pluginPlatformConfig;
 let basePath;
 const shell = electron.shell;
 
-function handleLearnCommand(args, event) {
-    const name = args[0];
-    const preposition = args[1];
-    const url = args[2];
-
-    logger.log('args', args);
-    logger.log(`url ${url}`);
-    logger.log(`name ${name}`);
-
-    if (!url || !preposition || !name) {
-        return;
-    }
-
-    const shortcutFile = pluginPlatformConfig.shortcutFile;
-    const filepath = `${basePath}/${name}${shortcutFile.extension}`;
-
-    logger.log(`Writing file ${filepath}`);
-
-    // TODO if the directory does not exist it will just crash.
-    //  Error: ENOENT: no such file or director
-    // TODO Make sure  that the string returned by teplace is a new one
-    // so that we do not edit the config itself!
-    const fileContent = shortcutFile.template.replace(shortcutFile.placeholder, url);
-    fs.writeFileSync(filepath, fileContent, 'utf-8');
-
-    event.sender.send('exec-reply', [{
-        // TODO should be localized
-        name: `'${name}' saved.`,
-        // TODO we can define the icon in the plugin config, may be eaier
-        icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
-        value: filepath,
-        detail: ''
-    }]);
-}
-
 function loadFilesMatchingKeywords(keywords, directory) {
     const results = [];
     for (let i = 0, l = directory.length; i < l; i++) {
@@ -87,7 +52,7 @@ function getOrCreateWorkingDirectory() {
     return directory;
 }
 
-function handleOpenCommand(args, event) {
+function returnAllFilesMatchingSearch(args, event) {
     if (!args) {
         // TODO return a proper message? like no results?
         logger.log('empty args, skipping.');
@@ -97,13 +62,50 @@ function handleOpenCommand(args, event) {
     event.sender.send('exec-reply', results);
 }
 
+function handleLearnCommand(args, event) {
+    returnAllFilesMatchingSearch(args, event);
+
+    const name = args[0];
+    const preposition = args[1];
+    const url = args[2];
+
+    logger.log('args', args);
+    logger.log(`url ${url}`);
+    logger.log(`name ${name}`);
+
+    if (!url || !preposition || !name) {
+        return;
+    }
+
+    const shortcutFile = pluginPlatformConfig.shortcutFile;
+    const filepath = `${basePath}/${name}${shortcutFile.extension}`;
+
+    logger.log(`Writing file ${filepath}`);
+
+    // TODO if the directory does not exist it will just crash.
+    //  Error: ENOENT: no such file or director
+    // TODO Make sure  that the string returned by teplace is a new one
+    // so that we do not edit the config itself!
+    const fileContent = shortcutFile.template.replace(shortcutFile.placeholder, url);
+    fs.writeFileSync(filepath, fileContent, 'utf-8');
+
+    event.sender.send('exec-reply', [{
+        // TODO should be localized
+        name: `'${name}' saved.`,
+        // TODO we can define the icon in the plugin config, may be eaier
+        icon: pluginConfig.icon || `${__dirname}/assets/search.svg`,
+        value: filepath,
+        detail: ''
+    }]);
+}
+
 function handleCommand(args, event, cmdInfo) {
     switch (cmdInfo.key) {
         case 'learn':
             handleLearnCommand(args, event);
             break;
         case 'open':
-            handleOpenCommand(args, event);
+            returnAllFilesMatchingSearch(args, event);
             break;
         default:
             logger.error(`command '${cmdInfo.key}' was received but cannot be handled`);

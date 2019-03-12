@@ -8,8 +8,20 @@ import logger from '../../../utils/logger';
 
 const pluginBasePath = `${os.tmpdir()}/${appName}/tests`;
 const testArtifacsPath = `${__dirname}/artifacts/shortcuts`;
+const partialLearnCommandArgs = ['test', 'as'];
+const fullLearnCommandArgs = ['test', 'as', 'http://test.com'];
+const fullOpenCommandArgs = ['test'];
+const learnCmdInfo = {
+    key: 'learn'
+};
+const openCmdInfo = {
+    key: 'open'
+};
 
-const assertOpenCommandResult = (result, expectedName, expectedIconName) => {
+const assertResult = (result, expectedName, expectedIconName) => {
+    if (!result) {
+        throw new Error(`Actual result is '${result}'. Expected name: '${expectedName}'`);
+    }
     expect(result.name).to.equal(expectedName);
     expect(result.icon).to.contains(`/assets/${expectedIconName}`);
     expect(result.value).to.equal(`${pluginBasePath}/${expectedName}.url`);
@@ -52,18 +64,14 @@ describe('enso plugin', () => {
     describe('learn command', () => {
         it('should learn command and create file appropriately', () => {
             // arrange
-            const args = ['test', 'as', 'http://test.com'];
             const event = {
                 sender: {
                     send: sinon.stub()
                 }
             };
-            const cmdInfo = {
-                key: 'learn'
-            };
 
             // act
-            exec(args, event, cmdInfo);
+            exec(fullLearnCommandArgs, event, learnCmdInfo);
 
             // assert
             const expectedFilePath = `${pluginBasePath}/test.url`;
@@ -71,23 +79,45 @@ describe('enso plugin', () => {
             const actualFileContent = fs.readFileSync(expectedFilePath, 'utf8');
             expect(actualFileContent).to.equal('Test content here: http://test.com');
         });
-    });
 
-    describe('open command', () => {
-        it('should return all the resutls matching the text input', () => {
+        it('should list results matching search', () => {
             // arrange
-            const args = ['test'];
             const event = {
                 sender: {
                     send: sinon.stub()
                 }
             };
-            const cmdInfo = {
-                key: 'open'
+
+            // act
+            exec(partialLearnCommandArgs, event, learnCmdInfo);
+
+            // assert
+            // assert
+            sinon.assert.calledOnce(event.sender.send);
+
+            const actualArguments = event.sender.send.getCall(0).args;
+            const eventNameArgument = actualArguments[0];
+            const resultsArgument = actualArguments[1];
+
+            expect(eventNameArgument).to.equal('exec-reply');
+
+            assertResult(resultsArgument[0], 'test-1', 'search.svg');
+            assertResult(resultsArgument[1], 'test-2', 'search.svg');
+            assertResult(resultsArgument[2], 'test-3', 'search.svg');
+        });
+    });
+
+    describe('open command', () => {
+        it('should return all the resutls matching the text input', () => {
+            // arrange
+            const event = {
+                sender: {
+                    send: sinon.stub()
+                }
             };
 
             // act
-            exec(args, event, cmdInfo);
+            exec(fullOpenCommandArgs, event, openCmdInfo);
 
             // assert
             sinon.assert.calledOnce(event.sender.send);
@@ -98,9 +128,9 @@ describe('enso plugin', () => {
 
             expect(eventNameArgument).to.equal('exec-reply');
 
-            assertOpenCommandResult(resultsArgument[0], 'test-1', 'search.svg');
-            assertOpenCommandResult(resultsArgument[1], 'test-2', 'search.svg');
-            assertOpenCommandResult(resultsArgument[2], 'test-3', 'search.svg');
+            assertResult(resultsArgument[0], 'test-1', 'search.svg');
+            assertResult(resultsArgument[1], 'test-2', 'search.svg');
+            assertResult(resultsArgument[2], 'test-3', 'search.svg');
         });
     });
 });
