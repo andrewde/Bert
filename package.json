@@ -47,8 +47,8 @@
     "patch-release": "node scripts/release.js patch",
     "minor-release": "node scripts/release.js minor",
     "major-release": "node scripts/release.js major",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
+    "package": "rm -rf ./out && electron-forge package",
+    "make": "rm -rf ./out && electron-forge make",
     "open-logs": "open ~/Library/Logs/Bert",
     "open-config": "open ~/.bert",
     "open-out": "open ./out"
