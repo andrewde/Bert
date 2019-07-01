@@ -95,35 +95,8 @@ function initTray() {
         click() {
             toggleMainWindow();
         }
-    }, {
-        // TODO this could be disabled as it does not work
-        label: 'Preferences',
-        click() {
-            if (!prefWindow || prefWindow.isDestroyed()) {
-                createPrefWindow();
-            } else {
-                prefWindow.restore();
-                prefWindow.show();
-                prefWindow.focus();
-            }
-        }
-    }, {
-        // TODO update links
-        label: 'Bug Report',
-        click() {
-            electron.shell.openExternal('http://bert.com/issues');
-        }
-    }, {
-        label: 'Help',
-        click() {
-            electron.shell.openExternal('http://bert.com/faq');
-        }
-    }, {
-        label: 'Donate',
-        click() {
-            electron.shell.openExternal('https://bert.com/donate');
-        }
-    }, {
+    },
+    {
         label: 'Exit',
         click() {
             app.quit();
