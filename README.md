@@ -10,36 +10,15 @@ TBD
 
 ## Usages
 
-Result in the `app` plugin being invoked:
-
-- chrome
-
-Result in the `calc` plugin being invoked:
-
-- calc 1+1
-
-Result in the `shell` plugin being invoked:
-
-- > pwd
-- > ls
-- etc.
-
-Result in the `find` plugin being invoked:
-
-- find something
+TBD
 
 ## Donate
 
-If you really like my work here, please support me a cup of coffee, thanks! :smile:
+TBD
 
 ## Requirement
 
-* Linux: none
-* MacOS: none
-* Windows:
-  * Everything.exe for fastly searching files, this is already packed in, what you need to do is not to quit it on tray.
-  * .NET Framework 2.0 for reading file icon. Usually this is already installed in most PCs, but in some old system like windowsXP it may not being installed, you can download it on [Microsoft's website](https://www.microsoft
-  * .com/zh-cn/download/confirmation.aspx?id=1639).
+TBD
 
 ## Usage
 
@@ -47,7 +26,11 @@ If you really like my work here, please support me a cup of coffee, thanks! :smi
 
 Then you can type in app names or commands, see [Screen Captures](#screen-captures) below.
 
-## Debug
+## Development
+
+Based on Electron Forge, "a complete tool for creating, publishing, and publishing modern Electron applications".
+
+### Debug
 
 see: http://electron.atom.io/docs/tutorial/debugging-main-process/
 
@@ -58,22 +41,16 @@ ELECTRON_RUN_AS_NODE=true node_modules/.bin/electron node_modules/node-inspector
 
 ```
 
-## Build
+### Build
 
 see [electron-builder](https://github.com/electron-userland/electron-builder)
 
 ```js
-npm run dist
+npm run build
 ```
 
-Notes:
+### Build distributable
 
-I was getting a bunch of errors, switched to `node/8.12.0` and all of my issues got fixed.
-
-### More details
-
-We’ll be using electron-builder since it has a built-in support for Code Signing/Auto Update etc.
-
-#### Build directory
-
-Create a directory build in the root of the project and save a background.png (macOS DMG background), icon.icns (macOS app icon) and icon.ico (Windows app icon) into it. The Linux icon set will be generated automatically based on the macOS.
+```js
+npm run make
+```
