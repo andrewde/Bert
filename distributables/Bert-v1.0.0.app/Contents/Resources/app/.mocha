@@ -1,3 +1,0 @@
---require babel-core/register
---require ./test/context-setup.js
-./app/**/*.spec.js
