@@ -1,0 +1,41 @@
+{
+  "name": "Bert",
+  "version": "0.0.3",
+  "main": "index.js",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "launcher",
+    "electron"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "author": {
+    "email": "",
+    "name": ""
+  },
+  "dependencies": {
+    "auto-launch": "^5.0.1",
+    "chokidar": "^1.5.2",
+    "co": "^4.6.0",
+    "dot-prop": "^4.0.0",
+    "electron-gh-releases": "^2.0.4",
+    "fs-extra": "^0.30.0",
+    "globule": "^1.0.0",
+    "i18next": "^3.4.3",
+    "i18next-node-fs-backend": "^0.1.2",
+    "is-electron-renderer": "^2.0.1",
+    "json5": "^0.5.0",
+    "key-event-to-string": "^1.1.1",
+    "npm": "^3.10.8"
+  },
+  "devDependencies": {
+    "electron-devtools-installer": "^2.0.1"
+  }
+}
