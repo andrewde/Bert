@@ -2,52 +2,44 @@
 
 ## Intro
 
-Bert is a cross platform launcher based on [Electron](https://github.com/electron/electron) and inspired by [ELaunch](https://github.com/zaaack/ELaunch) (MIT license), now only support linux and MacOS.
+Bert is a cross platform launcher based on [Electron](https://github.com/electron/electron) and inspired by [Enso Launcher by Humanized](https://www.reddit.com/r/answers/comments/2dw0n2/what_happened_to_humanized_especially_their/).
 
-## Usage
+It's initially a fork from [ELaunch](https://github.com/zaaack/ELaunch).
 
->Default Shotcut: Super+Space for linux and windows, Cmd+Space for MacOS
+I rely on Bert daily on MAC OS for work. I have thousands of shortcuts saved.
+Never tried it on Windows or Linux.
 
-Then you can type in app names or commands, see [Screen Captures](#screen-captures) below.
+## FAQ
 
-## Development
+### How to open Bert launcher
 
-Based on Electron Forge, "a complete tool for creating, publishing, and publishing modern Electron applications".
+Default Shotcut:
 
-### Debug
+`Command+Space` for linux and windows, `Cmd+E` for MacOS
 
-Start form the console to see the logs:
+### How to save a new command/shortcut
 
-```
-npm run start
-```
+Open Bert.
+Type: `learn <name> as <url>`
+Example: `learn google as https://google.com`
 
-### Build
+### How to open a command previously saved
 
-see [electron-builder](https://github.com/electron-userland/electron-builder)
+Open Bert.
+Type: `open <name>`
+Example: `open google`
 
-```js
-npm run build
-```
+### Where does Bert saves my user settings, shortcuts etc
 
-### Build distributable
+Everything is saved in a hidden directory under the current user home directory (`os.homedir()`) at `~/.bert`.
 
-```js
-npm run make
-```
+### Where are my commands/shortcuts saved
 
-Based on `electron-forge make`.
+Coommands are saved as `.url` files under `~/.bert/Enso`.
+'.url' is presumably a cross platform format for URLs.
 
-#### Where is electron-forge make configured?
+### How to change my settings
 
-`package.json` > `config` > `forge` > `make_targets`
-
-##### How to get a DMG?
-
-Just use the same command as above, but from a MAC.
-
-```
-The DMG target builds .dmg files, which are the standard format for sharing macOS apps.  The DMG acts like a zip file, but provides an easy way for users to take the app and put it in the /Applications directory. You can only build the DMG target on macOS machines.
-```
-
-Information about DMG makers: https://www.electronforge.io/config/makers/dmg
+There is a settings json file that you can customize.
+The file is localted in Bert's data directory `~/.bert/config.json5`.
+It's auto-generated the first time you launch Bert.
