@@ -2,7 +2,7 @@
 
 Based on Electron Forge, "a complete tool for creating, publishing, and publishing modern Electron applications".
 
-### Debug
+## Debug
 
 Start form the console to see the logs:
 
@@ -10,7 +10,7 @@ Start form the console to see the logs:
 npm run start
 ```
 
-### Build
+## Build
 
 see [electron-builder](https://github.com/electron-userland/electron-builder)
 
@@ -18,7 +18,7 @@ see [electron-builder](https://github.com/electron-userland/electron-builder)
 npm run build
 ```
 
-### Build distributable
+## Build distributable
 
 ```js
 npm run make
@@ -26,11 +26,11 @@ npm run make
 
 Based on `electron-forge make`.
 
-#### Where is electron-forge make configured?
+### Where is electron-forge make configured?
 
 `package.json` > `config` > `forge` > `make_targets`
 
-##### How to get a DMG?
+#### How to get a DMG?
 
 Just use the same command as above, but from a MAC.
 
