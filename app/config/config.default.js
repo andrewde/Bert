@@ -14,7 +14,7 @@ module.exports = {
     // get all ids by require('electron').screen.getAllDisplays().map(d=>d.id)
     display: 'primary',
     shortcuts: {
-        toggle: { default: 'Super+Space' },
+        toggle: { default: 'Super+E' },
         selectPrevItem: { default: 'Up' },
         selectNextItem: { default: 'Down' },
         selectPrevItemOpt: { default: 'Left' },
