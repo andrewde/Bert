@@ -7,7 +7,7 @@ const dialog = (electron || electron.remote).dialog
 
 const globalCommands = {
   toggle: {
-    defaultShortcut: 'Super+Space',
+    defaultShortcut: 'Super+E',
     // TODO export to constant
     func: winMgr.toggleMainWindow.bind(winMgr),
   },
