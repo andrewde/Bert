@@ -11,6 +11,12 @@ Never tried it on Windows or Linux.
 
 ## FAQ
 
+### Download
+
+Find the `App` file for `Mac OS` [here](distributables/Bert-v1.0.0.app).
+For Windows and Linux, you have to build it yourself.
+See our [developer guide](Development.md).
+
 ### How to open Bert launcher
 
 Default Shotcut:
