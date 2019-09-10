@@ -35,6 +35,15 @@ Open Bert.
 Type: `open <name>`
 Example: `open google`
 
+### How to update or delete a command
+
+This can be done by changing the underlying `.url` file linked to a command.
+
+Coommands are saved as `.url` files under `~/.bert/Enso`.
+'.url' is presumably a cross platform format for URLs.
+
+Just rename the file name (which is actually the command name).
+
 ### Where does Bert saves my user settings, shortcuts etc
 
 Everything is saved in a hidden directory under the current user home directory (`os.homedir()`) at `~/.bert`.
