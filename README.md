@@ -45,7 +45,7 @@ See our [developer guide](Development.md).
 
 Default Shotcut: `Command+E` for linux and windows, `Cmd+E` for MacOS.
 
-This can be changed by updating the `toggle` property deom your user settings located at `~/.bert/config.json5`
+This can be changed by updating the `toggle` property from your user settings located at `~/.bert/config.json5`.
 
 ### How to save a new command/shortcut
 
@@ -82,6 +82,8 @@ Coommands are saved as `.url` files under `~/.bert/Enso`.
 There is a settings json file that you can customize.
 The file is localted in Bert's data directory `~/.bert/config.json5`.
 It's auto-generated the first time you launch Bert.
+
+When the file is missing, Bert auto-regenarates it [from default config file](https://github.com/andrewde/Bert/blob/master/app/config/config.default.js).
 
 ## Roadmap
 
