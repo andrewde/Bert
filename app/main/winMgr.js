@@ -44,8 +44,8 @@ const winMgr = {
 
     console.log("x and y " + x + " and " + y);
 
-    // TODO this should be configurable from settings panel
-    // set window to left corner like enso by default
+    // TODO this should be configurable from the settings.
+    // Set window to left corner like enso by default.
     // x = 0;
     // y = 0;
 
