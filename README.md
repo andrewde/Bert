@@ -87,5 +87,8 @@ It's auto-generated the first time you launch Bert.
 
 Our priorities are as follow:
 
+- Reduze app size. ~ 500 MB uncompressed currently.
+- Fix auto launch at startup. You have to manually re-launch Bert currently.
 - Fuzzy search. Currently, we have a naive string matching ([see code](https://github.com/andrewde/Bert/blob/master/app/plugins/enso/index.js#L20)).
+- Recusively search files from `~/.bert/Enso`.
 - Add capability to save system path and not just web urls. The idea here is to invoke scripts on-demand.
