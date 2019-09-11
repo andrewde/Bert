@@ -23,6 +23,10 @@ We support the plugins initially included in [ELaunch](https://github.com/zaaack
 - Shell prompt (*shell*).
 - Calculator (*calc*).
 
+App plugin:
+
+![](screenshots/app.png)
+
 Shell plugin:
 
 ![](screenshots/shell.png)
