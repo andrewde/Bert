@@ -13,7 +13,8 @@ Never tried it on Windows or Linux.
 
 ### Download
 
-Find the `App` file for `Mac OS` [here](distributables/Bert-v1.0.0.app).
+Find a zip of the app file for `Mac OS` [here](https://github.com/andrewde/Bert/releases/tag/v1.0).
+
 For Windows and Linux, you have to build it yourself.
 See our [developer guide](Development.md).
 
