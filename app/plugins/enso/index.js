@@ -11,6 +11,7 @@ const shell = electron.shell;
 
 function loadFilesMatchingKeywords(keywords, directory) {
     const results = [];
+    // loop through each file in the directory
     for (let i = 0, l = directory.length; i < l; i++) {
         const filePath = directory[i];
         const fileExtension = path.extname(filePath);
