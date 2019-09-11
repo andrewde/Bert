@@ -3,6 +3,11 @@ const config = require('../config');
 import logger from '../utils/logger';
 import * as enso from '../plugins/enso/index';
 import * as app from '../plugins/app/index';
+// TODO Calc crashes when loading.
+// import * as calc from '../plugins/calc/index';
+import * as find from '../plugins/find/index';
+import * as shell from '../plugins/shell/index';
+import * as websearch from '../plugins/websearch/index';
 // Once a plugin is initialized, set its key to true.
 const pluginInitializationStatus = {};
 
@@ -30,6 +35,19 @@ function getPlugin(pluginInfo) {
             break;
         case 'app':
             plugin = app;
+            break;
+        // TODO Calc crashes when loading.
+        // case 'calc':
+        //     plugin = calc;
+        //     break;
+        case 'find':
+            plugin = find;
+            break;
+        case 'shell':
+            plugin = shell;
+            break;
+        case 'websearch':
+            plugin = websearch;
             break;
         default:
             logger.error(`plugin '${pluginInfo.name}' hasn't been imported via 'import *',
