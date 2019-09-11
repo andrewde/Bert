@@ -1,15 +1,34 @@
 # Bert
 
+- [Bert](#bert)
+  - [Intro](#intro)
+    - [Features](#features)
+      - [*app* - Search an app on the system](#app---search-an-app-on-the-system)
+      - [*find* - Search a file](#find---search-a-file)
+      - [*websearch* - Web search](#websearch---web-search)
+      - [*shell* - Shell prompt](#shell---shell-prompt)
+      - [*calc* - Calculator](#calc---calculator)
+  - [FAQ](#faq)
+    - [Download](#download)
+    - [How to open Bert launcher](#how-to-open-bert-launcher)
+    - [How to save a new command/shortcut](#how-to-save-a-new-commandshortcut)
+    - [How to open a command previously saved](#how-to-open-a-command-previously-saved)
+    - [How to update or delete a command](#how-to-update-or-delete-a-command)
+    - [Where does Bert save its data](#where-does-bert-save-its-data)
+    - [Where are my commands/shortcuts saved](#where-are-my-commandsshortcuts-saved)
+    - [How to change my user settings](#how-to-change-my-user-settings)
+  - [Roadmap](#roadmap)
+
 ![](screenshots/open-test.png)
 
 ## Intro
 
-Bert is a cross platform launcher based on [Electron](https://github.com/electron/electron) and inspired by [Enso Launcher by Humanized](https://www.reddit.com/r/answers/comments/2dw0n2/what_happened_to_humanized_especially_their/).
+Bert is a cross-platform launcher based on [Electron](https://github.com/electron/electron) and inspired by [Enso Launcher by Humanized](https://www.reddit.com/r/answers/comments/2dw0n2/what_happened_to_humanized_especially_their/).
 
 It's initially a fork from [ELaunch](https://github.com/zaaack/ELaunch).
 
-I rely on Bert daily on MAC OS for work. I have thousands of shortcuts saved.
-Never tried it on Windows or Linux.
+I rely on Bert daily on MAC OS for work. I have hundreds of web links saved.
+Bert has never been tested on Windows or Linux.
 
 ### Features
 
@@ -17,7 +36,7 @@ Bert essentially adds [a new plugin](https://github.com/andrewde/Bert/blob/maste
 
 We support the plugins initially included in [ELaunch](https://github.com/zaaack/ELaunch):
 
-#### *app* - Search an app on the system.
+#### *app* - Search an app on the system
 
 ![](screenshots/app.png)
 
@@ -30,7 +49,7 @@ We support the plugins initially included in [ELaunch](https://github.com/zaaack
 ![](screenshots/shell.png)
 ![](screenshots/shell-pwd.png)
 
-#### *calc* - Calculator.
+#### *calc* - Calculator
 
 ## FAQ
 
@@ -61,36 +80,36 @@ Example: `open google`
 
 ### How to update or delete a command
 
-This can be done by changing the underlying `.url` file linked to a command.
+This can be done by changing the underlying `.url` the file linked to a command.
 
 Coommands are saved as `.url` files under `~/.bert/Enso`.
-'.url' is presumably a cross platform format for URLs.
+'.url' is presumably a cross-platform format for URLs.
 
-Just rename the file name (which is actually the command name).
+Just rename the file name (which is the command name).
 
-### Where does Bert saves my user settings, shortcuts etc
+### Where does Bert save its data
 
 Everything is saved in a hidden directory under the current user home directory (`os.homedir()`) at `~/.bert`.
 
 ### Where are my commands/shortcuts saved
 
 Coommands are saved as `.url` files under `~/.bert/Enso`.
-'.url' is presumably a cross platform format for URLs.
+'.url' is presumably a cross-platform format for URLs.
 
-### How to change my settings
+### How to change my user settings
 
-There is a settings json file that you can customize.
-The file is localted in Bert's data directory `~/.bert/config.json5`.
+There is a settings JSON file that you can customize.
+The file is located in Bert's data directory `~/.bert/config.json5`.
 It's auto-generated the first time you launch Bert.
 
-When the file is missing, Bert auto-regenarates it [from default config file](https://github.com/andrewde/Bert/blob/master/app/config/config.default.js).
+When the file is missing, Bert auto-regenerates it [from default config file](https://github.com/andrewde/Bert/blob/master/app/config/config.default.js).
 
 ## Roadmap
 
 Our priorities are as follow:
 
-- Reduze app size. ~ 500 MB uncompressed currently.
-- Fix auto launch at startup. You have to manually re-launch Bert currently.
+- Reduce redistributables size. ~ 500 MB uncompressed currently.
+- Fix auto-launch at startup. You have to manually re-launch Bert currently.
 - Fuzzy search. Currently, we have a naive string matching ([see code](https://github.com/andrewde/Bert/blob/master/app/plugins/enso/index.js#L20)).
-- Recusively search files from `~/.bert/Enso`.
-- Add capability to save system path and not just web urls. The idea here is to invoke scripts on-demand.
+- Recursively search files from `~/.bert/Enso`. Currently any subdirectory is ignored (Example: `~/.bert/Enso/work` or `~/.bert/Enso/perso`).
+- Add capability to save system paths and not just web URLs. The idea here is to invoke scripts on-demand.
