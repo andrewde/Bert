@@ -1,5 +1,7 @@
 # Bert
 
+![](screenshots/open-test.png)
+
 ## Intro
 
 Bert is a cross platform launcher based on [Electron](https://github.com/electron/electron) and inspired by [Enso Launcher by Humanized](https://www.reddit.com/r/answers/comments/2dw0n2/what_happened_to_humanized_especially_their/).
