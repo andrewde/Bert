@@ -17,20 +17,20 @@ Bert essentially adds [a new plugin](https://github.com/andrewde/Bert/blob/maste
 
 We support the plugins initially included in [ELaunch](https://github.com/zaaack/ELaunch):
 
-- Search an app on the system (*app*).
-- find a file (*find*).
-- Web search (*websearch*).
-- Shell prompt (*shell*).
-- Calculator (*calc*).
-
-App plugin:
+#### *app* - Search an app on the system.
 
 ![](screenshots/app.png)
 
-Shell plugin:
+#### *find* - Search a file
+
+#### *websearch* - Web search
+
+#### *shell* - Shell prompt
 
 ![](screenshots/shell.png)
 ![](screenshots/shell-pwd.png)
+
+#### *calc* - Calculator.
 
 ## FAQ
 
@@ -43,9 +43,9 @@ See our [developer guide](Development.md).
 
 ### How to open Bert launcher
 
-Default Shotcut:
+Default Shotcut: `Command+E` for linux and windows, `Cmd+E` for MacOS.
 
-`Command+Space` for linux and windows, `Cmd+E` for MacOS
+This can be changed by updating the `toggle` property deom your user settings located at `~/.bert/config.json5`
 
 ### How to save a new command/shortcut
 
