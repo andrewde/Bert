@@ -17,6 +17,7 @@
     - [Where does Bert save its data](#where-does-bert-save-its-data)
     - [Where are my commands/shortcuts saved](#where-are-my-commandsshortcuts-saved)
     - [How to change my user settings](#how-to-change-my-user-settings)
+    - [Where are the logs located](#where-are-the-logs-located)
   - [Roadmap](#roadmap)
 
 ![](screenshots/open-test.png)
@@ -103,6 +104,16 @@ The file is located in Bert's data directory `~/.bert/config.json5`.
 It's auto-generated the first time you launch Bert.
 
 When the file is missing, Bert auto-regenerates it [from default config file](https://github.com/andrewde/Bert/blob/master/app/config/config.default.js).
+
+### Where are the logs located
+
+Our [logger facade](https://github.com/andrewde/Bert/blob/master/app/utils/logger.js) is based on [electron-log](https://www.npmjs.com/package/electron-log).
+
+By default it writes logs to the following locations:
+
+- on Linux: `~/.config/bert/log.log`
+- on macOS: `~/Library/Logs/bert/log.log`
+- on Windows: `%USERPROFILE%\AppData\Roaming\bert\log.log`
 
 ## Roadmap
 
