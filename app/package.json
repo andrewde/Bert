@@ -33,7 +33,7 @@
     "is-electron-renderer": "^2.0.1",
     "json5": "^0.5.0",
     "key-event-to-string": "^1.1.1",
-    "npm": "^3.10.8"
+    "npm": "^6.13.4"
   },
   "devDependencies": {
     "electron-devtools-installer": "^2.0.1"
